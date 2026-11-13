@@ -1,0 +1,661 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#172c36">
+<title>PHILOSOPHIA — Philosophical Catechism</title>
+
+<style>
+:root {
+  --bg:#f3efe5;
+  --surface:#fffdf8;
+  --text:#172c36;
+  --muted:#68777b;
+  --gold:#b18a4c;
+  --green:#344c48;
+  --border:#ded8ca;
+}
+body.dark {
+  --bg:#101c22;
+  --surface:#1a2a31;
+  --text:#f3efe5;
+  --muted:#aeb9b8;
+  --gold:#d3aa68;
+  --green:#8aa69a;
+  --border:#34474e;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  transition:background .2s,color .2s;
+}
+button,input {font:inherit}
+button {cursor:pointer}
+header {
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:15px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+.brand {
+  font-family:Georgia,serif;
+  font-size:22px;
+  letter-spacing:2px;
+  color:var(--gold);
+  font-weight:bold;
+}
+.brand small {
+  display:block;
+  color:var(--muted);
+  font:9px Arial,sans-serif;
+  letter-spacing:3px;
+  margin-top:3px;
+}
+.header-actions {display:flex;gap:8px}
+.icon-btn {
+  background:var(--bg);
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius:9px;
+  padding:9px 12px;
+}
+nav {
+  display:flex;
+  overflow-x:auto;
+  gap:7px;
+  padding:12px 5%;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+}
+nav button {
+  flex-shrink:0;
+  border:0;
+  padding:10px 14px;
+  border-radius:20px;
+  background:transparent;
+  color:var(--muted);
+}
+nav button.active,nav button:hover {
+  background:var(--green);
+  color:white;
+}
+main {
+  max-width:1050px;
+  margin:auto;
+  padding:25px 5% 100px;
+}
+.page {display:none}
+.page.active {display:block}
+.hero {
+  background:linear-gradient(130deg,#172c36,#344c48);
+  color:#fff;
+  padding:35px 28px;
+  border-radius:18px;
+  margin-bottom:25px;
+}
+.eyebrow {
+  color:#d3aa68;
+  text-transform:uppercase;
+  letter-spacing:3px;
+  font-size:11px;
+}
+.hero h1 {
+  font-family:Georgia,serif;
+  font-size:clamp(30px,6vw,48px);
+  margin:15px 0;
+}
+.hero p {color:#dce4df;line-height:1.7;max-width:600px}
+.primary {
+  background:var(--gold);
+  color:#172c36;
+  border:0;
+  border-radius:8px;
+  padding:12px 18px;
+  font-weight:bold;
+}
+.secondary {
+  background:transparent;
+  border:1px solid var(--gold);
+  color:var(--text);
+  border-radius:8px;
+  padding:11px 16px;
+}
+h2,h3 {font-family:Georgia,serif}
+.section-title {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:25px 0 15px;
+}
+.section-title h2 {margin:0}
+.muted {color:var(--muted)}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:14px;
+}
+.card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:19px;
+  border-radius:13px;
+}
+.card h3 {margin:8px 0}
+.card p {color:var(--muted);line-height:1.6;font-size:14px}
+.card button {margin-top:10px}
+.tag {
+  display:inline-block;
+  color:var(--gold);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.stat {
+  font-family:Georgia,serif;
+  font-size:29px;
+  color:var(--gold);
+}
+.search {
+  width:100%;
+  padding:14px;
+  border-radius:9px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  margin:12px 0;
+}
+.filters {display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 20px}
+.filters button {
+  padding:8px 12px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  border-radius:20px;
+}
+.filters button.active {background:var(--green);color:white}
+.question {
+  background:var(--surface);
+  border-left:4px solid var(--gold);
+  padding:20px;
+  margin:14px 0;
+  border-radius:8px;
+}
+.answer {display:none;color:var(--muted);line-height:1.7;margin-top:15px}
+.answer.show {display:block}
+footer {
+  text-align:center;
+  padding:30px 10px;
+  color:var(--muted);
+  border-top:1px solid var(--border);
+  font-size:13px;
+}
+.progress {
+  height:9px;
+  background:var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  margin:12px 0;
+}
+.progress div {height:100%;background:var(--gold);width:0%}
+.quiz-option {
+  display:block;
+  width:100%;
+  text-align:left;
+  padding:13px;
+  margin:9px 0;
+  background:var(--bg);
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius:8px;
+}
+.quiz-option:hover {border-color:var(--gold)}
+.notice {
+  border:1px solid var(--gold);
+  border-radius:12px;
+  padding:18px;
+  margin:15px 0;
+  line-height:1.7;
+}
+.hidden {display:none!important}
+@media(max-width:600px) {
+  header {padding:13px 4%}
+  main {padding:18px 4% 90px}
+  .hero {padding:27px 20px}
+  .brand {font-size:19px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    PHILOSOPHIA
+    <small>THINK DEEPLY · LIVE WISELY</small>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" onclick="toggleTheme()" aria-label="Toggle theme">☼ / ☾</button>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('home',this)">Home</button>
+  <button onclick="showPage('thinkers',this)">Thinkers</button>
+  <button onclick="showPage('africa',this)">African Philosophy</button>
+  <button onclick="showPage('catechism',this)">Catechism</button>
+  <button onclick="showPage('academy',this)">Academy</button>
+  <button onclick="showPage('bookmarks',this)">Bookmarks</button>
+  <button onclick="showPage('premium',this)">Premium</button>
+</nav>
+
+<main>
+
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="eyebrow">A journey into wisdom</div>
+    <h1>Welcome to the world of philosophy.</h1>
+    <p>
+      Explore humanity's greatest questions, discover the wisdom
+      of philosophers across civilizations, and develop the habit
+      of thinking deeply.
+    </p>
+    <button class="primary" onclick="navigate('thinkers')">Explore philosophers →</button>
+  </div>
+
+  <div class="section-title"><h2>Daily reflection</h2></div>
+  <div class="card">
+    <span class="tag">Think about it</span>
+    <h2 id="dailyQuestion">What is the meaning of a good life?</h2>
+    <p>Take a moment to reflect. Philosophy begins with curiosity.</p>
+    <button class="secondary" onclick="navigate('catechism')">Explore questions</button>
+  </div>
+
+  <div class="section-title"><h2>Your learning journey</h2></div>
+  <div class="grid">
+    <div class="card">
+      <div class="stat" id="bookCount">0</div>
+      <p>Saved philosophers</p>
+    </div>
+    <div class="card">
+      <div class="stat" id="lessonCount">0</div>
+      <p>Questions explored</p>
+    </div>
+    <div class="card">
+      <div class="stat">12+</div>
+      <p>Introductory thinkers</p>
+    </div>
+  </div>
+
+  <div class="section-title"><h2>Featured thinkers</h2></div>
+  <div class="grid" id="featured"></div>
+</section>
+
+<section id="thinkers" class="page">
+  <h1>Philosophers and thinkers</h1>
+  <p class="muted">Meet the minds that shaped human thought across history.</p>
+  <input class="search" id="thinkerSearch" placeholder="Search philosophers..." oninput="renderThinkers()">
+  <div class="filters">
+    <button class="active" onclick="setFilter('all',this)">All thinkers</button>
+    <button onclick="setFilter('Western',this)">Western</button>
+    <button onclick="setFilter('African',this)">African</button>
+    <button onclick="setFilter('Asian',this)">Asian</button>
+    <button onclick="setFilter('Other',this)">Other traditions</button>
+  </div>
+  <div class="grid" id="thinkerGrid"></div>
+</section>
+
+<section id="africa" class="page">
+  <div class="hero">
+    <div class="eyebrow">African intellectual heritage</div>
+    <h1>Africa thinks. Africa questions. Africa philosophizes.</h1>
+    <p>
+      Explore African philosophical traditions, indigenous knowledge,
+      personhood, community, ethics, identity and the nature of reality.
+    </p>
+  </div>
+  <div class="section-title"><h2>African philosophers</h2></div>
+  <div class="grid" id="africanGrid"></div>
+  <div class="notice">
+    <strong>Our commitment</strong><br>
+    African philosophy deserves substantial attention in the
+    history of world philosophy. This library will continue to
+    grow across African regions, languages and intellectual traditions.
+  </div>
+</section>
+
+<section id="catechism" class="page">
+  <h1>Philosophical Catechism</h1>
+  <p class="muted">Questions that invite reflection, answers that encourage understanding.</p>
+  <div class="filters">
+    <button class="active" onclick="renderQuestions('all',this)">All</button>
+    <button onclick="renderQuestions('Ethics',this)">Ethics</button>
+    <button onclick="renderQuestions('Knowledge',this)">Knowledge</button>
+    <button onclick="renderQuestions('African philosophy',this)">African philosophy</button>
+    <button onclick="renderQuestions('Existence',this)">Existence</button>
+  </div>
+  <div id="questionList"></div>
+</section>
+
+<section id="academy" class="page">
+  <h1>PHILOSOPHIA Academy</h1>
+  <p class="muted">Test your understanding and sharpen your philosophical thinking.</p>
+  <div class="card" id="quizCard">
+    <span class="tag">Knowledge challenge</span>
+    <h2 id="quizQuestion">Ready to test your knowledge?</h2>
+    <div id="quizOptions"></div>
+    <p id="quizFeedback" class="muted"></p>
+    <button class="primary" id="quizStart" onclick="startQuiz()">Start quiz</button>
+    <button class="secondary hidden" id="quizNext" onclick="nextQuestion()">Next question</button>
+    <p id="quizScore"></p>
+  </div>
+  <div class="section-title"><h2>Learning progress</h2></div>
+  <div class="card">
+    <strong id="progressText">0 questions explored</strong>
+    <div class="progress"><div id="progressBar"></div></div>
+    <p class="muted">Your progress is stored on this device.</p>
+  </div>
+</section>
+
+<section id="bookmarks" class="page">
+  <h1>Your bookmarks</h1>
+  <p class="muted">The philosophers you have chosen to save.</p>
+  <div class="grid" id="bookmarkGrid"></div>
+</section>
+
+<section id="premium" class="page">
+  <div class="hero">
+    <div class="eyebrow">PHILOSOPHIA Premium</div>
+    <h1>Go deeper into philosophy.</h1>
+    <p>Unlock an expanded world of philosophical learning.</p>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h3>Expanded library</h3>
+      <p>More philosophers, traditions and detailed lessons.</p>
+    </div>
+    <div class="card">
+      <h3>Advanced academy</h3>
+      <p>Deeper exercises, challenges and learning paths.</p>
+    </div>
+    <div class="card">
+      <h3>AI philosophy tutor</h3>
+      <p>A future feature for guided philosophical conversations.</p>
+    </div>
+  </div>
+  <div class="notice">
+    <h2>Monthly membership</h2>
+    <p>Premium checkout is not yet active. No payment will be collected in this version.</p>
+    <p><strong>Coming soon.</strong></p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="brand">PHILOSOPHIA</div>
+  <p>Think deeply. Live wisely.</p>
+  <p>Exploring global philosophy and African intellectual traditions.</p>
+  <p>© 2026 PHILOSOPHIA</p>
+</footer>
+
+<script>
+const philosophers = [
+ {name:"Socrates",origin:"Greek",category:"Western",period:"469–399 BCE",idea:"The examined life",bio:"Socrates was an ancient Greek philosopher known for questioning assumptions and encouraging people to examine their beliefs. His method of dialogue became central to philosophical inquiry."},
+ {name:"Plato",origin:"Greek",category:"Western",period:"c. 427–347 BCE",idea:"Forms and ideal justice",bio:"Plato founded the Academy in Athens. He explored justice, knowledge, political life and the distinction between appearances and enduring realities."},
+ {name:"Aristotle",origin:"Greek",category:"Western",period:"384–322 BCE",idea:"Virtue and flourishing",bio:"Aristotle studied logic, nature, ethics, politics and art. His virtue ethics describes a good life as a life of flourishing through cultivated character."},
+ {name:"Simone de Beauvoir",origin:"French",category:"Western",period:"1908–1986",idea:"Freedom and gender",bio:"De Beauvoir was an existentialist philosopher and writer whose work examined freedom, social expectations, oppression and the making of gender."},
+ {name:"Friedrich Nietzsche",origin:"German",category:"Western",period:"1844–1900",idea:"Values and self-overcoming",bio:"Nietzsche challenged inherited moral assumptions and explored creativity, power, culture and the possibility of creating values."},
+ {name:"Immanuel Kant",origin:"German",category:"Western",period:"1724–1804",idea:"Duty and reason",bio:"Kant explored the limits of human knowledge and argued that morality requires principles that can be rationally universalized."},
+ {name:"Confucius",origin:"Chinese",category:"Asian",period:"551–479 BCE",idea:"Virtue and social harmony",bio:"Confucius emphasized moral cultivation, humane conduct, learning, responsibility and the importance of relationships in a well-ordered society."},
+ {name:"Laozi",origin:"Chinese",category:"Asian",period:"Traditionally 6th century BCE",idea:"The Dao and naturalness",bio:"Laozi is traditionally associated with Daoism and the Dao De Jing, which reflects on the Dao, simplicity, humility and acting in harmony with nature."},
+ {name:"Mencius",origin:"Chinese",category:"Asian",period:"c. 372–289 BCE",idea:"Human moral potential",bio:"Mencius argued that human beings possess natural beginnings of moral goodness that can be cultivated through education and proper conditions."},
+ {name:"Ibn Sina",origin:"Persian",category:"Other",period:"980–1037",idea:"Being and the soul",bio:"Ibn Sina, also known as Avicenna, made influential contributions to metaphysics, logic, medicine and the philosophy of the soul."},
+ {name:"Ibn Khaldun",origin:"North African",category:"African",period:"1332–1406",idea:"Society and history",bio:"Ibn Khaldun was a North African historian and thinker whose Muqaddimah examined social cohesion, political authority, economics and historical change."},
+ {name:"Kwasi Wiredu",origin:"Ghanaian",category:"African",period:"1931–2022",idea:"Conceptual decolonization",bio:"Wiredu examined African philosophy, language, democracy and the importance of critically assessing concepts inherited through colonial education."},
+ {name:"Kwame Gyekye",origin:"Ghanaian",category:"African",period:"1939–2019",idea:"Moderate communitarianism",bio:"Gyekye explored Akan philosophy, personhood, tradition and the relationship between individual autonomy and community."},
+ {name:"Sophie Oluwole",origin:"Nigerian",category:"African",period:"1935–2018",idea:"Yoruba philosophy",bio:"Oluwole examined Yoruba thought and argued for serious philosophical engagement with African oral traditions and thinkers such as Orunmila."},
+ {name:"Paulin Hountondji",origin:"Beninese",category:"African",period:"1942–2024",idea:"African philosophy and criticism",bio:"Hountondji challenged the idea that African philosophy should be reduced to collective cultural worldviews and defended critical, rigorous philosophical inquiry."},
+ {name:"Henry Odera Oruka",origin:"Kenyan",category:"African",period:"1944–1995",idea:"Sage philosophy",bio:"Oruka developed the idea of sage philosophy, documenting critical and reflective reasoning among individual African thinkers."},
+ {name:"Frantz Fanon",origin:"Martinican",category:"Other",period:"1925–1961",idea:"Colonialism and liberation",bio:"Fanon explored colonial domination, racism, identity, oppression and liberation in influential works of political philosophy and psychiatry."},
+ {name:"Wangari Maathai",origin:"Kenyan",category:"African",period:"1940–2011",idea:"Environment and responsibility",bio:"Maathai connected environmental care, civic participation, human dignity and social responsibility through her activism and writing."}
+];
+
+const questions = [
+ {topic:"Ethics",q:"What is ethics?",a:"Ethics is the branch of philosophy concerned with right and wrong, good and bad, duties, virtues and how human beings ought to live."},
+ {topic:"Ethics",q:"What makes an action morally right?",a:"Philosophers disagree. Some emphasize consequences, others duties or rules, and others the character and virtues of the person acting."},
+ {topic:"Ethics",q:"What is virtue?",a:"A virtue is a stable quality of character, such as courage, justice, honesty or generosity, that helps a person live and act well."},
+ {topic:"Knowledge",q:"What is knowledge?",a:"A traditional account describes knowledge as justified true belief, although modern philosophers debate whether this account is sufficient."},
+ {topic:"Knowledge",q:"Can we know anything with certainty?",a:"Some knowledge may be highly secure, but skepticism asks whether our beliefs can ever be completely free from doubt."},
+ {topic:"Knowledge",q:"What is critical thinking?",a:"Critical thinking is the careful evaluation of reasons, evidence, assumptions and conclusions rather than accepting claims without examination."},
+ {topic:"African philosophy",q:"What is African philosophy?",a:"African philosophy includes the critical ideas, arguments and reflections developed by African thinkers across diverse languages, histories and traditions."},
+ {topic:"African philosophy",q:"What does Ubuntu mean?",a:"Ubuntu is associated with ideas of shared humanity, relational personhood and mutual responsibility. Its meanings and interpretations vary across African contexts."},
+ {topic:"African philosophy",q:"What is personhood in African philosophy?",a:"Some African philosophical approaches emphasize that personhood is shaped partly through relationships, moral conduct and participation in community. Other thinkers stress individual autonomy."},
+ {topic:"Existence",q:"What is the meaning of life?",a:"There is no universally accepted answer. Philosophers have connected meaning with happiness, virtue, relationships, freedom, service, faith and the creation of purpose."},
+ {topic:"Existence",q:"What is freedom?",a:"Freedom can mean the absence of external constraint, the ability to make meaningful choices, or the capacity to govern oneself through reason."},
+ {topic:"Existence",q:"What is philosophy?",a:"Philosophy is the disciplined examination of fundamental questions about reality, knowledge, value, reason, existence and human life."}
+];
+
+const quiz = [
+ {q:"Who is associated with the Socratic method?",options:["Plato","Socrates","Aristotle","Kant"],answer:1,why:"Socrates is famous for using questions and dialogue to examine beliefs."},
+ {q:"Which philosopher is associated with moderate communitarianism?",options:["Kwame Gyekye","Nietzsche","Laozi","Plato"],answer:0,why:"Kwame Gyekye developed an influential account of moderate communitarianism."},
+ {q:"What is ethics primarily concerned with?",options:["Astronomy","Right and wrong","Geometry","Grammar"],answer:1,why:"Ethics studies moral value, duties, virtues and how we ought to act."},
+ {q:"Which tradition is associated with the Dao?",options:["Stoicism","Existentialism","Daoism","Marxism"],answer:2,why:"The Dao is central to Daoist philosophical traditions."},
+ {q:"Who developed the idea of sage philosophy?",options:["Henry Odera Oruka","Socrates","Kant","Confucius"],answer:0,why:"Oruka documented critical reasoning among individual African sages."}
+];
+
+let currentFilter = "all";
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+let bookmarks = JSON.parse(localStorage.getItem("philoBookmarks") || "[]");
+let completed = JSON.parse(localStorage.getItem("philoCompleted") || "[]");
+
+function saveData() {
+  localStorage.setItem("philoBookmarks",JSON.stringify(bookmarks));
+  localStorage.setItem("philoCompleted",JSON.stringify(completed));
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+  localStorage.setItem("philoTheme",document.body.classList.contains("dark")?"dark":"light");
+}
+
+if(localStorage.getItem("philoTheme")==="dark") {
+  document.body.classList.add("dark");
+}
+
+function showPage(id,button) {
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  if(button) button.classList.add("active");
+  else {
+    const navButtons=[...document.querySelectorAll("nav button")];
+    const target={home:0,thinkers:1,africa:2,catechism:3,academy:4,bookmarks:5,premium:6}[id];
+    navButtons[target].classList.add("active");
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(id==="bookmarks") renderBookmarks();
+  if(id==="academy") updateProgress();
+}
+
+function navigate(id) {
+  showPage(id);
+}
+
+function thinkerCard(p) {
+  const saved=bookmarks.includes(p.name);
+  return `
+  <article class="card">
+    <span class="tag">${p.origin} · ${p.category}</span>
+    <h3>${p.name}</h3>
+    <p><strong>${p.idea}</strong></p>
+    <p>${p.period}</p>
+    <button class="secondary" onclick="showThinker('${p.name}')">Read biography</button>
+    <button class="icon-btn" onclick="toggleBookmark('${p.name}')">${saved?"★ Saved":"☆ Save"}</button>
+  </article>`;
+}
+
+function renderThinkers() {
+  const search=document.getElementById("thinkerSearch").value.toLowerCase();
+  const filtered=philosophers.filter(p=>
+    (currentFilter==="all"||p.category===currentFilter) &&
+    (p.name.toLowerCase().includes(search)||
+     p.idea.toLowerCase().includes(search)||
+     p.origin.toLowerCase().includes(search))
+  );
+  document.getElementById("thinkerGrid").innerHTML=filtered.length
+    ?filtered.map(thinkerCard).join("")
+    :"<p>No thinkers found. Try another search.</p>";
+}
+
+function setFilter(filter,button) {
+  currentFilter=filter;
+  document.querySelectorAll("#thinkers .filters button").forEach(b=>b.classList.remove("active"));
+  button.classList.add("active");
+  renderThinkers();
+}
+
+function renderAfrican() {
+  const africans=philosophers.filter(p=>p.category==="African");
+  document.getElementById("africanGrid").innerHTML=africans.map(thinkerCard).join("");
+}
+
+function showThinker(name) {
+  const p=philosophers.find(x=>x.name===name);
+  if(!p)return;
+  alert(p.name+"\n"+p.origin+" | "+p.period+"\n\n"+p.idea+"\n\n"+p.bio);
+}
+
+function toggleBookmark(name) {
+  if(bookmarks.includes(name)) bookmarks=bookmarks.filter(x=>x!==name);
+  else bookmarks.push(name);
+  saveData();
+  renderThinkers();
+  renderAfrican();
+  renderBookmarks();
+  updateHome();
+}
+
+function renderBookmarks() {
+  const saved=philosophers.filter(p=>bookmarks.includes(p.name));
+  document.getElementById("bookmarkGrid").innerHTML=saved.length
+    ?saved.map(thinkerCard).join("")
+    :"<p>You have not saved any philosophers yet.</p>";
+}
+
+function renderQuestions(topic,button) {
+  document.querySelectorAll("#catechism .filters button").forEach(b=>b.classList.remove("active"));
+  if(button)button.classList.add("active");
+  const filtered=questions.filter(q=>topic==="all"||q.topic===topic);
+  document.getElementById("questionList").innerHTML=filtered.map(q=>`
+    <div class="question">
+      <span class="tag">${q.topic}</span>
+      <h3>${q.q}</h3>
+      <button class="secondary" onclick="revealAnswer(this,${questions.indexOf(q)})">Reveal answer</button>
+      <div class="answer" id="answer${questions.indexOf(q)}">${q.a}</div>
+    </div>`).join("");
+}
+
+function revealAnswer(button,index) {
+  const answer=document.getElementById("answer"+index);
+  const opening=!answer.classList.contains("show");
+  answer.classList.toggle("show");
+  button.textContent=opening?"Hide answer":"Reveal answer";
+  if(opening&&!completed.includes(index)) {
+    completed.push(index);
+    saveData();
+    updateHome();
+    updateProgress();
+  }
+}
+
+function startQuiz() {
+  currentQuestion=0;
+  score=0;
+  document.getElementById("quizStart").classList.add("hidden");
+  document.getElementById("quizNext").classList.remove("hidden");
+  displayQuestion();
+}
+
+function displayQuestion() {
+  answered=false;
+  const q=quiz[currentQuestion];
+  document.getElementById("quizQuestion").textContent=
+    "Question "+(currentQuestion+1)+" of "+quiz.length+": "+q.q;
+  document.getElementById("quizOptions").innerHTML=q.options.map((o,i)=>
+    `<button class="quiz-option" onclick="chooseAnswer(${i})">${o}</button>`
+  ).join("");
+  document.getElementById("quizFeedback").textContent="";
+  document.getElementById("quizNext").classList.add("hidden");
+}
+
+function chooseAnswer(index) {
+  if(answered)return;
+  answered=true;
+  const q=quiz[currentQuestion];
+  const correct=index===q.answer;
+  if(correct)score++;
+  document.getElementById("quizFeedback").textContent=
+    (correct?"Correct! ":"Not quite. ")+q.why;
+  document.querySelectorAll(".quiz-option").forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.answer)b.style.borderColor="var(--gold)";
+  });
+  document.getElementById("quizNext").classList.remove("hidden");
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if(currentQuestion>=quiz.length) {
+    document.getElementById("quizQuestion").textContent="Quiz complete!";
+    document.getElementById("quizOptions").innerHTML="";
+    document.getElementById("quizFeedback").textContent=
+      "You scored "+score+" out of "+quiz.length+". Keep learning!";
+    document.getElementById("quizNext").classList.add("hidden");
+    document.getElementById("quizStart").classList.remove("hidden");
+    document.getElementById("quizStart").textContent="Try again";
+    document.getElementById("quizScore").textContent="Your score: "+score+"/"+quiz.length;
+    return;
+  }
+  displayQuestion();
+}
+
+function updateHome() {
+  document.getElementById("bookCount").textContent=bookmarks.length;
+  document.getElementById("lessonCount").textContent=completed.length;
+}
+
+function updateProgress() {
+  const count=completed.length;
+  document.getElementById("progressText").textContent=
+    count+" of "+questions.length+" questions explored";
+  document.getElementById("progressBar").style.width=
+    Math.min(100,count/questions.length*100)+"%";
+}
+
+function init() {
+  document.getElementById("featured").innerHTML=
+    philosophers.slice(0,4).map(thinkerCard).join("");
+  renderThinkers();
+  renderAfrican();
+  renderQuestions("all");
+  updateHome();
+  updateProgress();
+}
+
+init();
+</script>
+</body>
+</html>
