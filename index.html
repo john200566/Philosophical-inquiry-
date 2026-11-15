@@ -299,6 +299,12 @@ footer {
 .founder-panel p{color:var(--muted);line-height:1.65}
 .footer-founder{border:0;background:none;color:var(--gold);text-decoration:underline;text-underline-offset:3px;padding:5px;font:inherit;cursor:pointer}
 .voice-status{font-size:12px;color:var(--muted);margin:5px 0}
+textarea.search{width:100%;resize:vertical;font:inherit;line-height:1.6}
+label{display:block;margin:12px 0 5px;color:var(--muted)}
+nav{flex-wrap:wrap}
+nav button{white-space:nowrap}
+#flashcardAnswer{line-height:1.8;padding:14px;background:var(--bg);border-radius:10px}
+@media(max-width:600px){nav{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}nav button{flex:0 0 auto}}
 
 </style>
 </head>
@@ -327,6 +333,12 @@ footer {
   <button onclick="showPage('history',this)">History of Philosophy</button>
   <button onclick="showPage('catechism',this)">Catechism</button>
   <button onclick="showPage('academy',this)">Academy</button>
+  <button onclick="showPage('dictionary',this)">Dictionary</button>
+  <button onclick="showPage('flashcards',this)">Flashcards</button>
+  <button onclick="showPage('exams',this)">Examinations</button>
+  <button onclick="showPage('debates',this)">Debates</button>
+  <button onclick="showPage('journal',this)">My Journal</button>
+  <button onclick="showPage('africanResearch',this)">African Research</button>
   <button onclick="showPage('bookmarks',this)">Bookmarks</button>
   <button onclick="showPage('premium',this)">Premium</button>
 </nav>
@@ -488,6 +500,12 @@ footer {
 <section id="academy" class="page">
   <h1>PHILOSOPHICAL INQUIRY Academy</h1>
   <p class="muted">Test your understanding and sharpen your philosophical thinking.</p>
+  <div class="section-title"><h2>Guided study paths</h2></div>
+  <div class="grid" id="courseGrid">
+    <div class="card"><span class="tag">Beginner</span><h3>Introduction to Philosophy</h3><p>Meaning, branches, methods and the value of philosophical questioning.</p><button class="secondary" onclick="showPage('history')">Begin course</button></div>
+    <div class="card"><span class="tag">Intermediate</span><h3>Logic and Critical Thinking</h3><p>Arguments, premises, conclusions, validity, soundness and common fallacies.</p><button class="secondary" onclick="showPage('dictionary')">Study concepts</button></div>
+    <div class="card"><span class="tag">Focused study</span><h3>African Philosophy</h3><p>Personhood, community, sage philosophy, decolonisation and contemporary debates.</p><button class="secondary" onclick="showPage('africanResearch')">Explore course</button></div>
+  </div>
   <div class="card" id="quizCard">
     <span class="tag">Knowledge challenge</span>
     <h2 id="quizQuestion">Ready to test your knowledge?</h2>
@@ -505,6 +523,39 @@ footer {
   </div>
 </section>
 
+<section id="dictionary" class="page">
+  <h1>Philosophical Dictionary</h1><p class="muted">A growing A–Z guide to philosophical concepts. Search a term to see its meaning and an example.</p>
+  <input class="search" id="dictionarySearch" placeholder="Search a philosophical term..." oninput="renderDictionary()">
+  <div id="dictionaryList" class="grid"></div>
+</section>
+<section id="flashcards" class="page">
+  <h1>Flashcards and Revision</h1><p class="muted">Test your recall. Think of the answer before revealing it.</p>
+  <div class="card" id="flashcardBox"><span class="tag" id="flashcardCount">Card 1</span><h2 id="flashcardTerm">What is metaphysics?</h2><p id="flashcardAnswer" class="hidden"></p><div class="voice-controls"><button class="primary" onclick="flipFlashcard()">Reveal answer</button><button class="secondary" onclick="nextFlashcard()">Next card →</button><button class="secondary" onclick="speakElement('flashcardBox')">🔊 Listen</button></div></div>
+</section>
+<section id="exams" class="page">
+  <h1>Examination Centre</h1><p class="muted">A short practice examination with immediate feedback and a final score.</p>
+  <div class="card"><span class="tag">Practice examination</span><p id="examProgress">Ready when you are.</p><h2 id="examQuestion">Test your understanding of philosophy.</h2><div id="examOptions"></div><p id="examFeedback" class="muted" aria-live="polite"></p><button class="primary" id="examStart" onclick="startExam()">Start examination</button><button class="secondary hidden" id="examNext" onclick="nextExamQuestion()">Next question</button></div>
+</section>
+<section id="debates" class="page">
+  <h1>Debate and Critical Thinking</h1><p class="muted">Study opposing positions. A good philosophical discussion represents arguments fairly before evaluating them.</p>
+  <div id="debateList" class="grid"></div>
+</section>
+<section id="journal" class="page">
+  <h1>My Philosophy Journal</h1><p class="muted">Record your questions, arguments and reflections. Entries are saved on this device.</p>
+  <div class="card"><label for="journalTitle">Entry title</label><input class="search" id="journalTitle" placeholder="e.g. What makes a person good?"><label for="journalText">Your reflection</label><textarea class="search" id="journalText" rows="7" placeholder="Write your philosophical reflection here..."></textarea><button class="primary" onclick="saveJournalEntry()">Save reflection</button><p id="journalStatus" class="muted" aria-live="polite"></p></div>
+  <div class="section-title"><h2>Previous reflections</h2></div><div id="journalEntries"></div>
+</section>
+<section id="africanResearch" class="page">
+  <div class="hero"><div class="eyebrow">African intellectual traditions</div><h1>African Philosophy Research Centre</h1><p>Explore debates about personhood, community, knowledge, language, tradition, colonialism and the future of African thought.</p></div>
+  <div class="grid">
+    <article class="card"><span class="tag">Personhood and community</span><h2>Who is a person?</h2><p>Some communitarian accounts understand personhood partly through moral development and relationships. Critics ask how such accounts protect individual rights and dissent.</p><p><strong>Thinkers:</strong> Kwame Gyekye, Ifeanyi Menkiti and Kwasi Wiredu.</p></article>
+    <article class="card"><span class="tag">Sage philosophy</span><h2>Can philosophy be oral?</h2><p>Henry Odera Oruka's sage philosophy records reflective individuals who question inherited beliefs. It challenges the assumption that philosophy exists only in written academic texts.</p><p><strong>Thinker:</strong> Henry Odera Oruka.</p></article>
+    <article class="card"><span class="tag">Conceptual decolonisation</span><h2>How should African concepts be examined?</h2><p>Conceptual decolonisation asks scholars to examine the assumptions built into imported categories and to reason carefully with African languages and intellectual resources.</p><p><strong>Thinkers:</strong> Kwasi Wiredu and Paulin Hountondji.</p></article>
+    <article class="card"><span class="tag">Yoruba philosophy</span><h2>Reason, destiny and wisdom</h2><p>Yoruba intellectual traditions include sophisticated reflections on character, destiny, knowledge and practical wisdom. Interpretations must attend to language, context and debate.</p><p><strong>Thinker:</strong> Sophie Oluwole.</p></article>
+    <article class="card"><span class="tag">Political philosophy</span><h2>Justice and liberation</h2><p>African political thought examines colonialism, state power, freedom, democracy, solidarity and the conditions for human dignity.</p><p><strong>Thinkers:</strong> Frantz Fanon, Kwasi Wiredu and contemporary African philosophers.</p></article>
+    <article class="card"><span class="tag">Research practice</span><h2>How to write a research essay</h2><p>Define the problem, explain the historical context, reconstruct arguments, consider objections and defend a reasoned conclusion. Distinguish a philosopher's own view from interpretations of that view.</p><button class="secondary" onclick="showPage('journal')">Start a research reflection</button></article>
+  </div>
+</section>
 <section id="bookmarks" class="page">
   <h1>Your bookmarks</h1>
   <p class="muted">The philosophers you have chosen to save.</p>
@@ -742,17 +793,14 @@ if(localStorage.getItem("philoTheme")==="dark") {
 
 function showPage(id,button) {
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+  const page=document.getElementById(id);if(page)page.classList.add("active");
   document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-  if(button) button.classList.add("active");
-  else {
-    const navButtons=[...document.querySelectorAll("nav button")];
-    const target={home:0,thinkers:1,africa:2,history:3,catechism:4,academy:5,bookmarks:6,premium:7}[id];
-    navButtons[target].classList.add("active");
-  }
+  const nav=[...document.querySelectorAll("nav button")].find(b=>(b.getAttribute("onclick")||"").includes("'"+id+"'"));
+  if(nav)nav.classList.add("active");
+  if(id==="bookmarks")renderBookmarks();
+  if(id==="dictionary")renderDictionary();
+  if(id==="journal")renderJournal();
   window.scrollTo({top:0,behavior:"smooth"});
-  if(id==="bookmarks") renderBookmarks();
-  if(id==="academy") updateProgress();
 }
 
 function navigate(id) {
@@ -1079,6 +1127,10 @@ function runGlobalSearch(raw){
  const results=[];
  philosophers.forEach(p=>{if([p.name,p.origin,p.category,p.period,p.idea,p.bio].join(" ").toLowerCase().includes(query))results.push({kind:"Thinker",title:p.name,desc:p.idea+" · "+p.origin,action:"thinker",value:p.name});});
  questions.forEach((q,i)=>{if([q.topic,q.q,q.a].join(" ").toLowerCase().includes(query))results.push({kind:"Catechism · "+q.topic,title:q.q,desc:q.a,action:"question",value:String(i)});});
+ dictionaryTerms.forEach(t=>{if(t.join(" ").toLowerCase().includes(query))results.push({kind:"Dictionary",title:t[0],desc:t[1],action:"page",value:"dictionary"});});
+ flashcards.forEach((t,i)=>{if(t.join(" ").toLowerCase().includes(query))results.push({kind:"Revision flashcard",title:t[0],desc:t[1],action:"page",value:"flashcards"});});
+ debates.forEach(d=>{if(d.join(" ").toLowerCase().includes(query))results.push({kind:"Debate centre",title:d[0],desc:d[1]+" versus "+d[3],action:"page",value:"debates"});});
+ if("journal reflection study course academy".includes(query))results.push({kind:"Learning tools",title:"Study Academy and Journal",desc:"Guided study paths, examination practice and personal reflections.",action:"page",value:"academy"});
  const hist=document.getElementById("historyJourney");
  if(hist&&hist.innerText.toLowerCase().includes(query))results.push({kind:"Learning section",title:"History of Philosophy",desc:"Explore historical periods, traditions and philosophers.",action:"page",value:"history"});
  const unique=results.filter((r,i)=>results.findIndex(x=>x.kind===r.kind&&x.title===r.title)===i).slice(0,14);
@@ -1097,12 +1149,89 @@ function openSearchResult(index){
  }
 }
 
+
+const dictionaryTerms=[
+["Aesthetics","The branch of philosophy that studies beauty, art, taste and aesthetic experience.","Is beauty objective, subjective, or partly both?"],
+["A priori","Knowledge or justification claimed to be independent of particular sensory experience.","A logical truth is often discussed as a priori."],
+["Argument","A set of premises offered as reasons for accepting a conclusion.","A strong argument makes its reasoning clear."],
+["Being","The condition or nature of existence; a central concern of ontology.","What does it mean for something to be?"],
+["Causation","The relation between causes and their effects.","Did one event produce another, or merely precede it?"],
+["Consequentialism","The view that the moral status of an action depends primarily on its consequences.","An action may be judged by the good or harm it produces."],
+["Deontology","An approach to ethics emphasizing duties, rules or principles.","Some actions may be wrong even if they produce good results."],
+["Dialectic","A method of inquiry that develops through questioning, dialogue or the examination of opposing positions.","A debate can expose assumptions in both positions."],
+["Empiricism","The view that experience, especially sensory experience, is a major source of knowledge.","Observation and experiment are important to empiricist approaches."],
+["Epistemology","The branch of philosophy concerned with knowledge, belief, evidence and justification.","How do we know that a claim is true?"],
+["Ethics","The philosophical study of morality, value, virtue and how we ought to act.","Is honesty always the right choice?"],
+["Existentialism","A family of philosophies concerned with existence, freedom, responsibility and meaning.","How do people create meaning in an uncertain world?"],
+["Fallacy","A mistake or weakness in reasoning that undermines an argument.","Attacking a person instead of their argument is an ad hominem fallacy."],
+["Free will","The capacity or condition of agents to choose or act freely.","Are choices free if every event has a cause?"],
+["Idealism","A family of views giving mind, ideas or consciousness a fundamental role in reality.","How does mind relate to the world?"],
+["Logic","The study of good reasoning, inference and the structure of arguments.","Does the conclusion follow from the premises?"],
+["Materialism","The view that reality is fundamentally material or physical.","Can consciousness be fully explained in physical terms?"],
+["Metaphysics","The branch of philosophy that investigates being, reality, identity, causation, time and possibility.","What kinds of things fundamentally exist?"],
+["Ontology","The study of being and what exists.","Are numbers, minds and abstract objects real?"],
+["Phenomenology","A philosophical approach that studies structures of experience and how things appear to consciousness.","How is an experience lived from the first-person perspective?"],
+["Pragmatism","A philosophical tradition that connects meaning, inquiry and truth with practical consequences and experience.","What difference does an idea make in practice?"],
+["Rationalism","The view that reason is a significant source of knowledge.","Can reasoning reveal truths that observation alone cannot?"],
+["Skepticism","The questioning of whether knowledge or justified belief is possible in a particular domain.","What evidence would justify certainty?"],
+["Validity","A property of an argument in which the conclusion follows logically if the premises are true.","A valid argument can still have false premises."],
+["Ubuntu","A family of African ethical ideas emphasizing shared humanity, relational life and mutual responsibility; interpretations differ.","How do our relationships shape moral life?"]
+];
+const flashcards=[
+["What is metaphysics?","The branch of philosophy that studies the fundamental nature of reality, existence, identity, time and causation."],
+["What is epistemology?","The philosophical study of knowledge, belief, evidence and justification."],
+["Who developed sage philosophy?","Henry Odera Oruka, who documented critical and reflective reasoning among individual African sages."],
+["What is a valid argument?","An argument whose conclusion follows logically from its premises, if those premises are true."],
+["What is virtue ethics?","An approach to ethics that emphasizes character and virtues such as courage, justice and practical wisdom."],
+["What is the Socratic method?","A form of questioning and dialogue that tests definitions, assumptions and beliefs."],
+["What is the categorical imperative?","Kant's principle for testing whether the maxim of an action can be willed as a universal law."],
+["What is Ubuntu?","A set of African ethical ideas often associated with shared humanity, relational personhood and mutual responsibility."],
+["What is existentialism concerned with?","Human existence, freedom, responsibility, choice, anxiety and the search for meaning."],
+["What is the problem of induction?","The question of how past observations can justify expectations about unobserved or future cases."],
+["What is political philosophy?","The study of political authority, justice, rights, freedom, equality and the state."],
+["What is conceptual decolonisation?","The critical examination of inherited concepts and assumptions, including those shaped by colonial intellectual frameworks."]
+];
+const debates=[
+["Does morality depend on consequences?","Consequentialist view","Actions should be judged by the outcomes they produce, such as well-being or reduced suffering.","Duty-based view","Some actions are required or forbidden by principle, even when breaking a rule might produce better consequences.","Can consequences ever justify violating a person's rights?"],
+["Is the self independent or relational?","Individualist view","Personal identity and moral agency require respect for individual autonomy and rights.","Communitarian view","Human identity and flourishing are deeply shaped by relationships, language and community.","How can a society balance community obligations with individual freedom?"],
+["Can we know reality as it is?","Realist view","A world exists independently of our beliefs, and inquiry can give us increasingly accurate knowledge of it.","Sceptical or constructivist challenge","Our access to reality is mediated by perception, concepts, language and social practices.","What would count as evidence that a belief accurately represents reality?"],
+["Is freedom compatible with determinism?","Compatibilist view","Freedom can mean acting according to one's reasons without coercion, even in a causally ordered world.","Incompatibilist view","If every action is determined by prior causes, genuine freedom or ultimate responsibility may be impossible.","What kind of freedom is necessary for moral responsibility?"]
+];
+let flashIndex=0,examIndex=0,examScore=0,examAnswered=false;
+const examQuestions=[
+{q:"Which branch studies knowledge?",o:["Aesthetics","Epistemology","Ethics","Ontology"],a:1,e:"Epistemology studies knowledge, belief and justification."},
+{q:"Which philosopher is associated with the categorical imperative?",o:["Kant","Epicurus","Confucius","Fanon"],a:0,e:"Immanuel Kant developed the categorical imperative as a central moral principle."},
+{q:"What does validity concern?",o:["The truth of every premise","The logical relation between premises and conclusion","The speaker's authority","The popularity of an argument"],a:1,e:"Validity concerns whether the conclusion follows from the premises."},
+{q:"Who is associated with sage philosophy?",o:["Kwame Gyekye","Henry Odera Oruka","Plato","John Locke"],a:1,e:"Oruka's project documented reflective philosophical thought among African sages."},
+{q:"Which field studies beauty and art?",o:["Metaphysics","Aesthetics","Logic","Epistemology"],a:1,e:"Aesthetics examines beauty, art and aesthetic experience."},
+{q:"What is a premise?",o:["A reason offered in support of a conclusion","A contradiction","A question without an answer","A type of emotion"],a:0,e:"Premises are the supporting statements in an argument."},
+{q:"Which tradition emphasizes the Dao?",o:["Stoicism","Daoism","Existentialism","Scholasticism"],a:1,e:"The Dao is central to Daoist philosophy."},
+{q:"What is a central concern of political philosophy?",o:["Chemical reactions","Justice and authority","Musical pitch","Plant growth"],a:1,e:"Political philosophy studies justice, rights, power and legitimate authority."},
+{q:"What is empiricism?",o:["Knowledge through experience","Knowledge only through dreams","Denial of all evidence","The study of art"],a:0,e:"Empiricism gives experience an important role in knowledge."},
+{q:"What does Ubuntu commonly emphasize?",o:["Isolation","Shared humanity and relationships","Pure calculation","The rejection of community"],a:1,e:"Ubuntu is often associated with relational personhood and mutual responsibility."}
+];
+function renderDictionary(){const q=(document.getElementById('dictionarySearch')?.value||'').toLowerCase();const list=dictionaryTerms.filter(x=>x.join(' ').toLowerCase().includes(q));document.getElementById('dictionaryList').innerHTML=list.map(x=>`<article class="card"><h3>${escapeSearch(x[0])}</h3><p>${escapeSearch(x[1])}</p><p class="muted"><strong>Think about:</strong> ${escapeSearch(x[2])}</p></article>`).join('')||'<p>No matching terms found.</p>';}
+function renderFlashcard(){const x=flashcards[flashIndex];document.getElementById('flashcardCount').textContent=`Card ${flashIndex+1} of ${flashcards.length}`;document.getElementById('flashcardTerm').textContent=x[0];const a=document.getElementById('flashcardAnswer');a.textContent=x[1];a.classList.add('hidden');document.querySelector('#flashcardBox .primary').textContent='Reveal answer';}
+function flipFlashcard(){const a=document.getElementById('flashcardAnswer');a.classList.toggle('hidden');document.querySelector('#flashcardBox .primary').textContent=a.classList.contains('hidden')?'Reveal answer':'Hide answer';}
+function nextFlashcard(){flashIndex=(flashIndex+1)%flashcards.length;renderFlashcard();}
+function renderDebates(){document.getElementById('debateList').innerHTML=debates.map(d=>`<article class="card"><h2>${escapeSearch(d[0])}</h2><h3>${escapeSearch(d[1])}</h3><p>${escapeSearch(d[2])}</p><h3>${escapeSearch(d[3])}</h3><p>${escapeSearch(d[4])}</p><div class="notice"><strong>Question for reflection</strong><p>${escapeSearch(d[5])}</p></div><button class="secondary" onclick="openDebateJournal(${debates.indexOf(d)})">Write my position</button></article>`).join('');}
+function openDebateJournal(i){document.getElementById('journalTitle').value='Debate: '+debates[i][0];document.getElementById('journalText').value='My position: \n\nReasons: \n\nPossible objection: \n\nMy response: ';showPage('journal');}
+function getJournal(){try{return JSON.parse(localStorage.getItem('philoJournal')||'[]')}catch(e){return []}}
+function saveJournalEntry(){const title=document.getElementById('journalTitle').value.trim(),body=document.getElementById('journalText').value.trim();if(!title||!body){document.getElementById('journalStatus').textContent='Please enter a title and reflection.';return;}const entries=getJournal();entries.unshift({title,body,date:new Date().toLocaleString()});localStorage.setItem('philoJournal',JSON.stringify(entries));document.getElementById('journalTitle').value='';document.getElementById('journalText').value='';document.getElementById('journalStatus').textContent='Your reflection has been saved on this device.';renderJournal();}
+function renderJournal(){const entries=getJournal();document.getElementById('journalEntries').innerHTML=entries.length?entries.map((e,i)=>`<article class="card"><small class="muted">${escapeSearch(e.date)}</small><h3>${escapeSearch(e.title)}</h3><p style="white-space:pre-wrap">${escapeSearch(e.body)}</p><button class="secondary" onclick="deleteJournalEntry(${i})">Delete entry</button></article>`).join(''):'<p class="muted">No journal entries yet.</p>';}
+function deleteJournalEntry(i){const e=getJournal();e.splice(i,1);localStorage.setItem('philoJournal',JSON.stringify(e));renderJournal();}
+function startExam(){examIndex=0;examScore=0;document.getElementById('examStart').classList.add('hidden');showExamQuestion();}
+function showExamQuestion(){examAnswered=false;const q=examQuestions[examIndex];document.getElementById('examProgress').textContent=`Question ${examIndex+1} of ${examQuestions.length}`;document.getElementById('examQuestion').textContent=q.q;document.getElementById('examOptions').innerHTML=q.o.map((x,i)=>`<button class="quiz-option" onclick="answerExam(${i})">${escapeSearch(x)}</button>`).join('');document.getElementById('examFeedback').textContent='';document.getElementById('examNext').classList.add('hidden');}
+function answerExam(i){if(examAnswered)return;examAnswered=true;const q=examQuestions[examIndex];if(i===q.a)examScore++;document.getElementById('examFeedback').textContent=(i===q.a?'Correct. ':'Not quite. ')+q.e;document.querySelectorAll('#examOptions button').forEach((b,j)=>{b.disabled=true;if(j===q.a)b.style.borderColor='var(--gold)'});document.getElementById('examNext').classList.remove('hidden');}
+function nextExamQuestion(){examIndex++;if(examIndex>=examQuestions.length){document.getElementById('examQuestion').textContent='Examination complete';document.getElementById('examOptions').innerHTML='';document.getElementById('examFeedback').textContent=`Your score: ${examScore} out of ${examQuestions.length}. Review the explanations and try again.`;document.getElementById('examProgress').textContent='Finished';document.getElementById('examNext').classList.add('hidden');document.getElementById('examStart').classList.remove('hidden');document.getElementById('examStart').textContent='Try again';return;}showExamQuestion();}
+
 function init() {
   document.getElementById("featured").innerHTML=
     philosophers.slice(0,4).map(thinkerCard).join("");
   renderThinkers();
   renderAfrican();
   renderQuestions("all");
+  renderDictionary();renderFlashcard();renderDebates();renderJournal();
   updateHome();
   updateProgress();
   const loader=document.getElementById("loadingScreen");
