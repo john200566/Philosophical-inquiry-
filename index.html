@@ -273,11 +273,43 @@ footer {
   .brand {font-size:clamp(12px,3.5vw,17px);letter-spacing:.5px}
   .brand small {font-size:8px;letter-spacing:2px}
 }
+
+.global-search-wrap{padding:10px 5%;background:var(--bg);border-bottom:1px solid var(--border)}
+.global-search-inner{max-width:1050px;margin:auto;position:relative}
+.global-search{width:100%;padding:13px 15px;border:1px solid var(--border);border-radius:11px;background:var(--surface);color:var(--text);font-size:15px}
+.global-search-results{display:none;position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:30;max-height:65vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 35px rgba(0,0,0,.18);padding:8px}
+.global-search-results.open{display:block}
+.search-result{display:block;width:100%;text-align:left;padding:12px;border:0;border-bottom:1px solid var(--border);background:transparent;color:var(--text);border-radius:7px}
+.search-result:hover{background:var(--bg)}
+.search-result small{display:block;color:var(--muted);margin-top:4px;line-height:1.45}
+.loading-screen{position:fixed;inset:0;z-index:1000;background:#172c36;color:#f3efe5;display:flex;align-items:center;justify-content:center;text-align:center;transition:opacity .35s ease,visibility .35s ease}
+.loading-screen.hide{opacity:0;visibility:hidden;pointer-events:none}
+.loading-inner{padding:25px}
+.loading-mark{width:58px;height:58px;border:2px solid #b18a4c;border-radius:50%;display:grid;place-items:center;margin:0 auto 20px;font:28px Georgia,serif;color:#d3aa68;animation:loadingPulse 1.4s ease-in-out infinite}
+.loading-title{font:bold 20px Georgia,serif;letter-spacing:2px;color:#d3aa68}
+.loading-sub{font-size:11px;letter-spacing:3px;margin-top:8px;color:#dce4df}
+.loading-line{width:125px;height:3px;background:#43545a;margin:24px auto 0;overflow:hidden;border-radius:8px}
+.loading-line:after{content:"";display:block;height:100%;width:40%;background:#d3aa68;animation:loadingMove 1s ease-in-out infinite}
+@keyframes loadingMove{from{transform:translateX(-120%)}to{transform:translateX(320%)}}
+@keyframes loadingPulse{50%{transform:scale(1.08);opacity:.7}}
+.founder-modal{display:none;position:fixed;inset:0;z-index:110;background:rgba(8,18,22,.78);padding:18px;align-items:center;justify-content:center}
+.founder-modal.open{display:flex}
+.founder-panel{width:min(420px,100%);background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:16px;padding:25px;text-align:center}
+.founder-photo{width:112px;height:112px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);margin:4px auto 12px;display:block}
+.founder-panel p{color:var(--muted);line-height:1.65}
+.footer-founder{border:0;background:none;color:var(--gold);text-decoration:underline;text-underline-offset:3px;padding:5px;font:inherit;cursor:pointer}
+.voice-status{font-size:12px;color:var(--muted);margin:5px 0}
+
 </style>
 </head>
 
 <body>
-
+<div class="loading-screen" id="loadingScreen" aria-label="Loading Philosophical Inquiry">
+  <div class="loading-inner"><div class="loading-mark">Φ</div>
+    <div class="loading-title">PHILOSOPHICAL INQUIRY</div>
+    <div class="loading-sub">THINK DEEPLY · LIVE WISELY</div><div class="loading-line"></div>
+  </div>
+</div>
 <header>
   <div class="brand">
     PHILOSOPHICAL INQUIRY
@@ -294,12 +326,14 @@ footer {
   <button onclick="showPage('africa',this)">African Philosophy</button>
   <button onclick="showPage('history',this)">History of Philosophy</button>
   <button onclick="showPage('catechism',this)">Catechism</button>
-  <button onclick="showPage('history',this)">History of Philosophy</button>
   <button onclick="showPage('academy',this)">Academy</button>
   <button onclick="showPage('bookmarks',this)">Bookmarks</button>
   <button onclick="showPage('premium',this)">Premium</button>
 </nav>
-
+<div class="global-search-wrap"><div class="global-search-inner">
+  <input id="globalSearch" class="global-search" type="search" placeholder="Search philosophers, questions, ideas and topics..." autocomplete="off" oninput="runGlobalSearch(this.value)" onkeydown="if(event.key==='Escape')closeGlobalSearch()">
+  <div id="globalSearchResults" class="global-search-results" role="listbox"></div>
+</div></div>
 <main>
 
 <section id="home" class="page active">
@@ -380,7 +414,7 @@ footer {
     <div class="eyebrow">A voyage through human thought</div>
     <h1>The history of philosophy</h1>
     <p>Follow humanity's continuing attempt to understand reality, knowledge, goodness, beauty, society and our place in the universe. Each age inherits questions, challenges answers and opens new paths of inquiry.</p>
-    <div class="voice-controls"><button class="voice-btn" onclick="speakElement('historyJourney')">▶ Listen to introduction</button><button class="voice-btn" onclick="stopSpeaking()">■ Stop voice</button></div>
+    <div class="voice-controls"><button class="voice-btn" onclick="speakElement('historyJourney')">▶ Listen</button><button class="voice-btn" onclick="pauseSpeaking()">Ⅱ Pause</button><button class="voice-btn" onclick="resumeSpeaking()">▶ Resume</button><button class="voice-btn" onclick="stopSpeaking()">■ Stop</button></div><div class="voice-status" id="voiceStatus" aria-live="polite">Voice reading uses your device's available English voice.</div>
   </div>
   <div id="historyJourney">
     <div class="notice"><strong>How to understand this journey</strong><p>Historical periods are useful guides, not sealed boxes. Traditions overlap, influence one another and develop at different speeds. The familiar sequence—ancient, medieval, modern and contemporary—is especially common in histories of European philosophy; it is not the whole history of philosophy. Philosophical reflection also has deep roots in Africa, South Asia, East Asia and other societies.</p></div>
@@ -440,28 +474,15 @@ footer {
     <button onclick="renderQuestions('Existence',this)">Existence</button>
     <button onclick="renderQuestions('History',this)">History</button>
     <button onclick="renderQuestions('Metaphysics',this)">Metaphysics</button>
+    <button onclick="renderQuestions('Politics',this)">Politics</button>
     <button onclick="renderQuestions('Political philosophy',this)">Political philosophy</button>
-    <button onclick="renderQuestions('Philosophy of religion',this)">Religion</button>
+    <button onclick="renderQuestions('Religion',this)">Religion</button>
+    <button onclick="renderQuestions('Philosophy of religion',this)">Philosophy of religion</button>
     <button onclick="renderQuestions('Logic',this)">Logic</button>
     <button onclick="renderQuestions('Aesthetics',this)">Aesthetics</button>
-  <button onclick="renderQuestions('Metaphysics',this)">Metaphysics</button>
-  <button onclick="renderQuestions('Political philosophy',this)">Politics</button>
-  <button onclick="renderQuestions('Logic',this)">Logic</button>
-  <button onclick="renderQuestions('Aesthetics',this)">Aesthetics</button>
-  <button onclick="renderQuestions('Philosophy of religion',this)">Religion</button>
-  <button onclick="renderQuestions('History',this)">History</button>
+    <button onclick="renderQuestions('Philosophy of science',this)">Philosophy of science</button>
   </div>
   <div id="questionList"></div>
-</section>
-
-<section id="history" class="page">
-  <div class="hero">
-    <div class="eyebrow">A voyage through human thought</div>
-    <h1>The History of Philosophy</h1>
-    <p>Follow humanity's long inquiry into reality, knowledge, justice, beauty, meaning and the good life. This is a connected world history, not a story belonging to one civilization alone.</p>
-  </div>
-  <div class="notice"><strong>How to use this journey</strong><br>Study each period in order, listen to the lesson, meet its thinkers, and ask how its questions still matter today. Dates are approximate and traditions often overlap.</div>
-  <div id="historyList"></div>
 </section>
 
 <section id="academy" class="page">
@@ -546,7 +567,17 @@ footer {
   <p>Think deeply. Live wisely.</p>
   <p>Exploring global philosophy and African intellectual traditions.</p>
   <p>© 2026 PHILOSOPHICAL INQUIRY</p>
+  <p><button class="footer-founder" onclick="openFounder()">Founded and developed by Chukwu John</button></p>
+  <p><button class="footer-founder" onclick="openFounder()">About the founder</button></p>
 </footer>
+<div class="founder-modal" id="founderModal" role="dialog" aria-modal="true" aria-label="About the founder" onclick="if(event.target===this)closeFounder()">
+  <div class="founder-panel">
+    <img class="founder-photo" src="data:image/webp;base64,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" alt="Portrait of Chukwu John">
+    <span class="tag">The founder</span><h2>Chukwu John</h2>
+    <p>Founder and developer of PHILOSOPHICAL INQUIRY, an educational project dedicated to making philosophical ideas accessible and encouraging thoughtful inquiry across world traditions.</p>
+    <button class="primary" onclick="closeFounder()">Close</button>
+  </div>
+</div>
 
 <script>
 const philosophers = [
@@ -641,6 +672,44 @@ const questions = [
  {topic:"Existence",q:"What is the meaning of being?",a:"This is a central metaphysical question about what it means for anything to exist. Philosophers have approached it through substance, process, existence, essence, events and relations."}
 ];
 
+
+// Additional catechism questions for broader study and revision.
+questions.push(
+{topic:"Metaphysics",q:"What is metaphysics?",a:"Metaphysics investigates fundamental questions about reality: what exists, identity, change, causation, time, possibility and being. Aristotle called the inquiry into being qua being first philosophy."},
+{topic:"Metaphysics",q:"What is ontology?",a:"Ontology is the branch of metaphysics concerned with being and existence. It asks what kinds of things exist and how they are related—for example, objects, properties, events, minds and numbers."},
+{topic:"Metaphysics",q:"What is the problem of personal identity?",a:"It asks what makes a person the same person over time despite physical and psychological change. Philosophers have proposed bodily continuity, memory and psychological continuity."},
+{topic:"Metaphysics",q:"What is free will?",a:"Free will concerns whether people can genuinely choose and act freely. Compatibilists argue that freedom can coexist with determinism, while incompatibilists deny that both can be true in the relevant sense."},
+{topic:"Logic",q:"What is an argument in philosophy?",a:"An argument is a set of statements in which premises are offered as reasons for accepting a conclusion. Philosophical argument evaluates whether the premises support the conclusion."},
+{topic:"Logic",q:"What is the difference between validity and soundness?",a:"An argument is valid when its conclusion follows logically from its premises. It is sound when it is valid and its premises are all true."},
+{topic:"Logic",q:"What is a fallacy?",a:"A fallacy is a mistake or weakness in reasoning. Formal fallacies involve logical structure; informal fallacies involve relevance, ambiguity or unsupported assumptions."},
+{topic:"Logic",q:"What is the Socratic method?",a:"The Socratic method uses disciplined questioning and dialogue to examine definitions, assumptions and implications. It can reveal contradictions and help participants refine their beliefs."},
+{topic:"Political philosophy",q:"What is political philosophy?",a:"Political philosophy examines the foundations of political authority, justice, rights, liberty, equality, law, citizenship and the proper organization of society."},
+{topic:"Political philosophy",q:"What is justice?",a:"Justice concerns what people are owed and how benefits, burdens, rights and opportunities should be distributed. Philosophers disagree about equality, desert, need and liberty."},
+{topic:"Political philosophy",q:"What is social contract theory?",a:"Social contract theories explain political authority through an actual or hypothetical agreement among people. Hobbes, Locke and Rousseau developed influential but different versions."},
+{topic:"Political philosophy",q:"What is democracy?",a:"Democracy is a form of political organization in which people have a role in collective decision-making, commonly through voting and representative institutions."},
+{topic:"Aesthetics",q:"What is aesthetics?",a:"Aesthetics is the branch of philosophy concerned with beauty, art, taste, aesthetic experience and interpretation. It asks what makes something art and whether aesthetic judgments can be justified."},
+{topic:"Aesthetics",q:"Can beauty be objective?",a:"Some philosophers defend standards of beauty that are not merely personal preferences; others emphasize culture, history and individual response."},
+{topic:"Philosophy of religion",q:"What is philosophy of religion?",a:"Philosophy of religion critically examines arguments concerning God or ultimate reality, faith, religious experience, evil, miracles, immortality and reason."},
+{topic:"Philosophy of religion",q:"What is the problem of evil?",a:"The problem of evil asks how suffering and wrongdoing can be reconciled with an all-powerful, all-knowing and perfectly good God. Philosophers offer different theodicies and defenses."},
+{topic:"Philosophy of science",q:"What is philosophy of science?",a:"Philosophy of science studies scientific reasoning, explanation, evidence, laws, models, objectivity and the limits of scientific knowledge."},
+{topic:"Philosophy of science",q:"What is falsifiability?",a:"Falsifiability is the idea that a scientific claim should expose itself to possible evidence that could show it to be false. Karl Popper made this criterion influential."},
+{topic:"Existence",q:"What is existentialism?",a:"Existentialism is a diverse movement concerned with existence, freedom, responsibility, anxiety and meaning. Major figures include Kierkegaard, Nietzsche, Sartre, de Beauvoir and Camus."},
+{topic:"Existence",q:"What does Sartre mean by existence precedes essence?",a:"Sartre's phrase expresses the view that human beings are not born with a fixed purpose. Through choices and actions, people shape who they become."},
+{topic:"African philosophy",q:"What is ethnophilosophy?",a:"Ethnophilosophy studies collective worldviews and conceptual systems as philosophy. It has been influential but controversial in debates about individual critical argument and authorship."},
+{topic:"African philosophy",q:"What is sage philosophy?",a:"Sage philosophy, associated especially with Henry Odera Oruka, investigates reflective and critical ideas of individual wise persons, including oral thinkers."},
+{topic:"African philosophy",q:"What is conceptual decolonization?",a:"Kwasi Wiredu used conceptual decolonization to encourage critical examination of concepts inherited through colonial languages and education, including comparison with African languages."},
+{topic:"African philosophy",q:"What is the philosophical significance of Ubuntu?",a:"Ubuntu is associated with relational ideas of humanity and community. It raises questions about personhood, mutual recognition, solidarity and moral responsibility."},
+{topic:"Knowledge",q:"What is rationalism?",a:"Rationalism gives reason a central role in knowledge and may hold that some truths can be known independently of sense experience. Descartes, Spinoza and Leibniz are commonly associated with it."},
+{topic:"Knowledge",q:"What is empiricism?",a:"Empiricism emphasizes experience, especially sensory experience, as a major source of knowledge. Locke, Berkeley and Hume are prominent early modern empiricists."},
+{topic:"Knowledge",q:"What is skepticism?",a:"Skepticism questions whether certain knowledge is possible or whether particular beliefs are justified. It encourages careful examination of evidence and assumptions."},
+{topic:"Ethics",q:"What is utilitarianism?",a:"Utilitarianism evaluates actions or rules by their consequences for overall well-being. Bentham and Mill are influential classical utilitarians."},
+{topic:"Ethics",q:"What is deontological ethics?",a:"Deontological ethics emphasizes duties, rules or constraints that may apply regardless of consequences. Kant's moral philosophy is a major example."},
+{topic:"Ethics",q:"What is care ethics?",a:"Care ethics emphasizes relationships, dependency, attentiveness and the moral importance of responding to particular people and contexts. It developed partly through feminist philosophy."},
+{topic:"History of philosophy",q:"Why is ancient Greek philosophy important?",a:"Ancient Greek philosophers developed influential methods and debates in logic, metaphysics, ethics and politics. Their work is important, but forms one part of a wider global history."},
+{topic:"History of philosophy",q:"What characterizes medieval philosophy?",a:"Medieval philosophy includes diverse Christian, Islamic and Jewish traditions. Thinkers examined faith and reason, God, universals, causation, law and knowledge."},
+{topic:"History of philosophy",q:"What is contemporary philosophy?",a:"Contemporary philosophy broadly refers to philosophy from the twentieth century to the present. It includes analytic and continental traditions and work in African, feminist, environmental, political and many other fields."}
+);
+
 const quiz = [
  {q:"Who is associated with the Socratic method?",options:["Plato","Socrates","Aristotle","Kant"],answer:1,why:"Socrates is famous for using questions and dialogue to examine beliefs."},
  {q:"Which philosopher is associated with moderate communitarianism?",options:["Kwame Gyekye","Nietzsche","Laozi","Plato"],answer:0,why:"Kwame Gyekye developed an influential account of moderate communitarianism."},
@@ -678,7 +747,7 @@ function showPage(id,button) {
   if(button) button.classList.add("active");
   else {
     const navButtons=[...document.querySelectorAll("nav button")];
-    const target={home:0,thinkers:1,africa:2,catechism:3,history:4,academy:5,bookmarks:6,premium:7}[id];
+    const target={home:0,thinkers:1,africa:2,history:3,catechism:4,academy:5,bookmarks:6,premium:7}[id];
     navButtons[target].classList.add("active");
   }
   window.scrollTo({top:0,behavior:"smooth"});
@@ -857,7 +926,7 @@ function closeProfile() {
   document.getElementById("profileModal").classList.remove("open");
   document.body.style.overflow="";
 }
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeProfile();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProfile();closeFounder();closeGlobalSearch();}});
 
 function toggleBookmark(name) {
   if(bookmarks.includes(name)) bookmarks=bookmarks.filter(x=>x!==name);
@@ -876,55 +945,37 @@ function renderBookmarks() {
     :"<p>You have not saved any philosophers yet.</p>";
 }
 
-const historyPeriods = [
- {period:"1. Ancient philosophy",dates:"c. 3000 BCE – c. 500 CE",body:"Ancient philosophy did not emerge in a single place or at one moment. In Egypt and Mesopotamia, scribes and sages reflected on justice, order, wisdom, death and the place of human beings in the cosmos. In India, the Vedic and Upanishadic traditions explored the self, ultimate reality, action and liberation; Buddhist and Jain thinkers developed rigorous accounts of suffering, knowledge and non-violence. In China, Confucian, Daoist and Mohist thinkers debated virtue, social harmony, nature and good government. In the Greek-speaking world, early thinkers investigated nature and change; Socrates turned attention toward ethical examination, Plato developed dialogues on justice and knowledge, and Aristotle systematized logic, biology, ethics, politics and metaphysics.",thinkers:"Egyptian wisdom traditions; Thales; Anaximander; Heraclitus; Parmenides; Pythagoras; Socrates; Plato; Aristotle; Epicurus; Zeno of Citium; Confucius; Laozi; Mozi; Mencius; the Buddha; Mahavira; Nāgārjuna.",works:"Plato’s Republic; Aristotle’s Metaphysics and Nicomachean Ethics; the Analects; the Dao De Jing; the Upanishads; early Buddhist discourses.",question:"Is reality fundamentally changing, permanent, or both?"},
- {period:"2. Late antiquity and the medieval worlds",dates:"c. 500 – 1500",body:"Philosophy continued in multiple intellectual communities. In Europe, Augustine and Boethius shaped Christian thought; later scholastic philosophers such as Anselm and Thomas Aquinas explored the relation between faith and reason. In the Islamic world, al-Kindi, al-Farabi, Ibn Sina (Avicenna), al-Ghazali and Ibn Rushd (Averroes) debated metaphysics, logic, science and theology. Jewish philosophers such as Saadia Gaon and Maimonides also brought philosophical reasoning into dialogue with religious tradition. In Africa, intellectual life included the scholarship of North African and Ethiopian traditions; in the wider world, Indian and Chinese philosophical schools continued to develop.",thinkers:"Augustine; Boethius; Anselm; Thomas Aquinas; al-Kindi; al-Farabi; Ibn Sina; al-Ghazali; Ibn Rushd; Maimonides; Dōgen; Zhu Xi; Madhva; Rāmānuja.",works:"Augustine’s Confessions; Aquinas’s Summa Theologiae; Ibn Sina’s Book of Healing; al-Ghazali’s The Incoherence of the Philosophers; Maimonides’ Guide for the Perplexed.",question:"Can philosophical reason and religious faith support or challenge one another?"},
- {period:"3. Renaissance and early modern philosophy",dates:"c. 1400 – 1700",body:"Renaissance humanism renewed interest in classical texts, education, political life and human creativity. The growth of print, oceanic encounters, religious reform and new scientific methods changed intellectual life. Early modern philosophers asked how knowledge could be secured and how political authority should be justified. René Descartes sought certainty through methodical doubt; Thomas Hobbes examined political order; John Locke defended empiricism and natural rights; Baruch Spinoza developed a rationalist metaphysics; and Gottfried Wilhelm Leibniz proposed a system of monads and sufficient reason. These debates unfolded alongside major philosophical traditions in Africa, Asia and the Americas, which should not be treated as absent from world history.",thinkers:"Erasmus; Niccolò Machiavelli; René Descartes; Thomas Hobbes; Anne Conway; Baruch Spinoza; John Locke; Gottfried Wilhelm Leibniz.",works:"Descartes’ Meditations on First Philosophy; Hobbes’ Leviathan; Spinoza’s Ethics; Locke’s Essay Concerning Human Understanding; Machiavelli’s The Prince.",question:"What can we know, and what makes political authority legitimate?"},
- {period:"4. Enlightenment and nineteenth-century philosophy",dates:"c. 1700 – 1900",body:"Enlightenment thinkers debated reason, liberty, education, religion, progress and political reform. David Hume challenged assumptions about causation and the self; Jean-Jacques Rousseau examined freedom and inequality; Immanuel Kant investigated the conditions and limits of knowledge and grounded morality in rational duty. In the nineteenth century, G. W. F. Hegel developed a philosophy of history and social life; Karl Marx analyzed capitalism and class; Søren Kierkegaard explored individual existence and faith; John Stuart Mill defended liberty and utilitarian ethics; Friedrich Nietzsche criticized inherited values; and William James helped develop pragmatism. The period also includes influential women thinkers and anti-colonial voices whose contributions were often marginalized in standard histories.",thinkers:"David Hume; Jean-Jacques Rousseau; Immanuel Kant; Mary Wollstonecraft; G. W. F. Hegel; Arthur Schopenhauer; Søren Kierkegaard; Karl Marx; John Stuart Mill; Friedrich Nietzsche; William James.",works:"Kant’s Critique of Pure Reason; Wollstonecraft’s A Vindication of the Rights of Woman; Hegel’s Phenomenology of Spirit; Marx and Engels’ The Communist Manifesto; Mill’s On Liberty; Nietzsche’s Thus Spoke Zarathustra.",question:"Can reason, freedom and social progress transform human life?"},
- {period:"5. Twentieth-century and contemporary philosophy",dates:"c. 1900 – present",body:"Philosophy in the twentieth and twenty-first centuries is plural and global. Analytic philosophy developed through logic, language and argument; phenomenology examined lived experience; existentialism explored freedom and meaning; pragmatism emphasized inquiry and practical consequences; critical theory studied power and society; feminist philosophy challenged exclusion and gender hierarchy; and postcolonial thinkers analyzed empire, race and liberation. African philosophy expanded through debates about colonialism, personhood, language, tradition, democracy and knowledge. Contemporary work also addresses technology, artificial intelligence, climate change, bioethics, global justice and the future of humanity. These movements overlap rather than forming one single school.",thinkers:"Bertrand Russell; G. E. Moore; Ludwig Wittgenstein; Edmund Husserl; Martin Heidegger; Simone de Beauvoir; Jean-Paul Sartre; Hannah Arendt; W. V. O. Quine; John Rawls; Michel Foucault; Frantz Fanon; Kwasi Wiredu; Kwame Gyekye; Sophie Oluwole; Henry Odera Oruka; Paulin Hountondji; Martha Nussbaum; Judith Butler; Achille Mbembe; Alfred North Whitehead.",works:"Whitehead’s Process and Reality and Adventures of Ideas; Wittgenstein’s Philosophical Investigations; Beauvoir’s The Second Sex; Fanon’s The Wretched of the Earth; Rawls’ A Theory of Justice; Wiredu’s Philosophy and an African Culture.",question:"How should philosophy respond to power, difference, science and a rapidly changing world?"}
-];
+function attrJSON(value) { return JSON.stringify(value).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/</g,'&lt;'); }
 
-function speakText(text) {
-  if(!('speechSynthesis' in window)) { alert('Voice playback is not supported by this browser. Try opening the app in Chrome.'); return; }
-  window.speechSynthesis.cancel();
-  const utterance=new SpeechSynthesisUtterance(String(text||''));
-  utterance.lang='en-GB';
-  utterance.rate=0.92;
-  window.speechSynthesis.speak(utterance);
-}
-function stopVoice() { if('speechSynthesis' in window) window.speechSynthesis.cancel(); }
-function renderHistory() {
-  document.getElementById('historyList').innerHTML=historyPeriods.map((item,i)=>`
-    <article class="card history-card">
-      <span class="tag">${item.dates}</span><h2>${item.period}</h2>
-      <p>${item.body}</p>
-      <p><strong>Important thinkers:</strong> ${item.thinkers}</p>
-      <p><strong>Selected works:</strong> ${item.works}</p>
-      <p><strong>Guiding question:</strong> ${item.question}</p>
-      <button class="secondary" onclick="speakText(${JSON.stringify(item.period+'. '+item.body+' Important thinkers: '+item.thinkers+'. Selected works: '+item.works+'. Guiding question: '+item.question).replace(/</g,'\\u003c')})">🔊 Listen to lesson</button>
-    </article>`).join('');
-}
 
-function speakText(text) {
-  if(!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
-    alert("Voice reading is not supported by this browser. Try opening the app in Chrome.");
-    return;
-  }
-  window.speechSynthesis.cancel();
-  const utterance=new SpeechSynthesisUtterance(text);
-  utterance.lang="en-GB";
-  utterance.rate=0.92;
-  utterance.pitch=1;
-  window.speechSynthesis.speak(utterance);
+let activeUtterance=null;
+function speakText(text){
+ if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){
+  alert("Voice reading is not supported in this browser. Please open the app in Google Chrome.");return;
+ }
+ const clean=String(text||"").replace(/\s+/g," ").trim();if(!clean)return;
+ const synth=window.speechSynthesis;synth.cancel();activeUtterance=null;
+ const status=document.getElementById("voiceStatus");if(status)status.textContent="Preparing voice...";
+ const chunks=clean.match(/[^.!?]+[.!?]*|[^.!?]+$/g)||[clean];let index=0;
+ function speakNext(){
+  if(index>=chunks.length){if(status)status.textContent="Finished reading.";return;}
+  const part=chunks[index++].trim();if(!part){speakNext();return;}
+  const u=new SpeechSynthesisUtterance(part);u.lang="en-GB";u.rate=0.9;u.pitch=1;
+  const vs=synth.getVoices();const selected=vs.find(v=>/^en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang));if(selected)u.voice=selected;
+  activeUtterance=u;u.onstart=()=>{if(status)status.textContent="Reading aloud...";};
+  u.onend=()=>{if(index<chunks.length)speakNext();else if(status)status.textContent="Finished reading.";};
+  u.onerror=()=>{if(status)status.textContent="Playback failed. Try Chrome and check your phone's text-to-speech settings.";};
+  synth.speak(u);if(synth.paused)synth.resume();
+ }
+ if(!synth.getVoices().length){
+  let started=false;const begin=()=>{if(started)return;started=true;synth.removeEventListener("voiceschanged",begin);speakNext();};
+  synth.addEventListener("voiceschanged",begin);setTimeout(begin,700);
+ }else speakNext();
 }
-function speakElement(id) {
-  const el=document.getElementById(id);
-  if(!el)return;
-  speakText(el.innerText || el.textContent || "");
-}
-function stopSpeaking() {
-  if('speechSynthesis' in window) window.speechSynthesis.cancel();
-}
+function speakElement(id){const el=document.getElementById(id);if(el)speakText(el.innerText||el.textContent||"");}
+function pauseSpeaking(){if("speechSynthesis" in window){speechSynthesis.pause();const s=document.getElementById("voiceStatus");if(s)s.textContent="Paused.";}}
+function resumeSpeaking(){if("speechSynthesis" in window){speechSynthesis.resume();const s=document.getElementById("voiceStatus");if(s)s.textContent="Resuming...";}}
+function stopSpeaking(){if("speechSynthesis" in window){speechSynthesis.cancel();activeUtterance=null;const s=document.getElementById("voiceStatus");if(s)s.textContent="Playback stopped.";}}
 
 function renderQuestions(topic,button) {
   document.querySelectorAll("#catechism .filters button").forEach(b=>b.classList.remove("active"));
@@ -934,9 +985,9 @@ function renderQuestions(topic,button) {
     <div class="question">
       <span class="tag">${q.topic}</span>
       <h3>${q.q}</h3>
-      <button class="secondary" onclick="speakText(${JSON.stringify(q.q)})">🔊 Listen to question</button>
+      <button class="secondary" onclick="speakText(${attrJSON(q.q)})">🔊 Listen to question</button>
       <button class="secondary" onclick="revealAnswer(this,${questions.indexOf(q)})">Reveal answer</button>
-      <div class="answer" id="answer${questions.indexOf(q)}">${q.a}<br><button class="secondary" onclick="speakText(${JSON.stringify(q.a)})">🔊 Listen to answer</button></div>
+      <div class="answer" id="answer${questions.indexOf(q)}">${q.a}<br><button class="secondary" onclick="speakText(${attrJSON(q.a)})">🔊 Listen to answer</button></div>
     </div>`).join("");
 }
 
@@ -1017,18 +1068,50 @@ function updateProgress() {
     Math.min(100,count/questions.length*100)+"%";
 }
 
+
+function openFounder(){document.getElementById("founderModal").classList.add("open");}
+function closeFounder(){document.getElementById("founderModal").classList.remove("open");}
+function closeGlobalSearch(){document.getElementById("globalSearchResults").classList.remove("open");}
+function escapeSearch(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function runGlobalSearch(raw){
+ const query=(raw||"").trim().toLowerCase(),box=document.getElementById("globalSearchResults");
+ if(query.length<2){box.innerHTML="";box.classList.remove("open");return;}
+ const results=[];
+ philosophers.forEach(p=>{if([p.name,p.origin,p.category,p.period,p.idea,p.bio].join(" ").toLowerCase().includes(query))results.push({kind:"Thinker",title:p.name,desc:p.idea+" · "+p.origin,action:"thinker",value:p.name});});
+ questions.forEach((q,i)=>{if([q.topic,q.q,q.a].join(" ").toLowerCase().includes(query))results.push({kind:"Catechism · "+q.topic,title:q.q,desc:q.a,action:"question",value:String(i)});});
+ const hist=document.getElementById("historyJourney");
+ if(hist&&hist.innerText.toLowerCase().includes(query))results.push({kind:"Learning section",title:"History of Philosophy",desc:"Explore historical periods, traditions and philosophers.",action:"page",value:"history"});
+ const unique=results.filter((r,i)=>results.findIndex(x=>x.kind===r.kind&&x.title===r.title)===i).slice(0,14);
+ box.innerHTML=unique.length?unique.map((r,i)=>`<button class="search-result" onclick="openSearchResult(${i})"><strong>${escapeSearch(r.title)}</strong><small>${escapeSearch(r.kind)} · ${escapeSearch(r.desc.slice(0,180))}</small></button>`).join(""):'<p class="muted" style="padding:12px">No matches found. Try another philosopher, concept or phrase.</p>';
+ window.currentSearchResults=unique;box.classList.add("open");
+}
+function openSearchResult(index){
+ const r=(window.currentSearchResults||[])[index];if(!r)return;
+ closeGlobalSearch();document.getElementById("globalSearch").blur();
+ if(r.action==="thinker"){navigate("thinkers");showThinker(r.value);}
+ else if(r.action==="page")navigate(r.value);
+ else if(r.action==="question"){
+  navigate("catechism");renderQuestions("all");
+  const a=document.getElementById("answer"+r.value);
+  if(a){a.classList.add("show");a.scrollIntoView({behavior:"smooth",block:"center"});}
+ }
+}
+
 function init() {
   document.getElementById("featured").innerHTML=
     philosophers.slice(0,4).map(thinkerCard).join("");
   renderThinkers();
   renderAfrican();
   renderQuestions("all");
-  renderHistory();
   updateHome();
   updateProgress();
+  const loader=document.getElementById("loadingScreen");
+  if(loader)setTimeout(()=>loader.classList.add("hide"),750);
 }
 
 init();
+document.addEventListener("click",e=>{const w=document.querySelector(".global-search-inner");if(w&&!w.contains(e.target))closeGlobalSearch();});
+window.addEventListener("pageshow",()=>{if("speechSynthesis" in window&&speechSynthesis.paused)speechSynthesis.resume();});
 </script>
 </body>
 </html>
