@@ -228,6 +228,35 @@ footer {
   line-height:1.7;
 }
 .hidden {display:none!important}
+
+.profile-modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(8,18,22,.78);
+  padding:18px;
+  overflow-y:auto;
+}
+.profile-modal.open {display:flex;align-items:flex-start;justify-content:center}
+.profile-panel {
+  width:min(760px,100%);
+  margin:20px auto;
+  background:var(--surface);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 18px 60px rgba(0,0,0,.25);
+}
+.profile-top {display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.profile-panel h2 {margin:8px 0}
+.profile-panel h3 {margin:22px 0 8px;color:var(--gold)}
+.profile-panel p,.profile-panel li {line-height:1.75;color:var(--muted)}
+.profile-panel ul {padding-left:22px}
+.profile-close {border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:8px;padding:9px 12px}
+.profile-meta {font-size:13px;color:var(--muted)}
+
 @media(max-width:600px) {
   header {padding:13px 4%}
   main {padding:18px 4% 90px}
@@ -403,6 +432,28 @@ footer {
 
 </main>
 
+
+<div id="profileModal" class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profileName" onclick="if(event.target===this)closeProfile()">
+  <article class="profile-panel">
+    <div class="profile-top">
+      <div>
+        <span class="tag" id="profileTradition"></span>
+        <h2 id="profileName"></h2>
+        <div class="profile-meta" id="profileMeta"></div>
+      </div>
+      <button class="profile-close" onclick="closeProfile()" aria-label="Close profile">Close ✕</button>
+    </div>
+    <h3>Biography</h3>
+    <p id="profileBio"></p>
+    <h3>Major philosophical ideas</h3>
+    <ul id="profileIdeas"></ul>
+    <h3>Important works</h3>
+    <ul id="profileWorks"></ul>
+    <h3>Contribution to philosophy</h3>
+    <p id="profileContribution"></p>
+  </article>
+</div>
+
 <footer>
   <div class="brand">PHILOSOPHICAL INQUIRY</div>
   <p>Think deeply. Live wisely.</p>
@@ -534,11 +585,136 @@ function renderAfrican() {
   document.getElementById("africanGrid").innerHTML=africans.map(thinkerCard).join("");
 }
 
+const profileDetails = {
+  "Socrates": {
+    bio:"Socrates was an Athenian philosopher who left no writings of his own. Much of what is known about his thought comes through accounts by Plato, Xenophon and other ancient writers. He made philosophical dialogue a way of examining how people understand justice, virtue and the good life.",
+    ideas:["The examined life is central to human flourishing.","Careful questioning exposes contradictions and unclear assumptions.","Virtue and knowledge are closely connected in his ethical thought."],
+    works:["No surviving works written by Socrates; his conversations are represented especially in Plato's dialogues."],
+    contribution:"The Socratic method became a lasting model of critical inquiry, dialogue and education. His influence shaped Plato and the subsequent history of Western philosophy."
+  },
+  "Plato": {
+    bio:"Plato was an Athenian philosopher and student of Socrates. He founded the Academy, one of the earliest enduring institutions of higher learning in the Greek world. His dialogues address knowledge, justice, love, education, politics and the nature of reality.",
+    ideas:["The Forms account for stable realities behind changing appearances.","Justice concerns harmony in the soul and in the city.","Philosophical education turns the mind toward knowledge and the good."],
+    works:["Republic","Apology","Phaedo","Symposium","Theaetetus"],
+    contribution:"Plato established a major tradition of systematic philosophical dialogue and influenced metaphysics, epistemology, ethics, political philosophy and educational thought."
+  },
+  "Aristotle": {
+    bio:"Aristotle was a Greek philosopher from Stagira and a student of Plato. He founded his own school, the Lyceum, and investigated a wide range of subjects, including logic, biology, physics, metaphysics, ethics, politics and poetry.",
+    ideas:["Virtue is developed through habit and practical wisdom.","Human flourishing (eudaimonia) is the highest human good.","Substances, causes and forms help explain the natural world."],
+    works:["Nicomachean Ethics","Politics","Metaphysics","De Anima","Poetics"],
+    contribution:"Aristotle helped shape formal logic and established influential approaches to scientific inquiry, metaphysics, ethics and political analysis."
+  },
+  "Simone de Beauvoir": {
+    bio:"Simone de Beauvoir was a French existentialist philosopher, novelist and essayist. Her work examined freedom, ambiguity, oppression, social institutions and the ways people become shaped by gendered expectations.",
+    ideas:["Human freedom is exercised within concrete social conditions.","Gender roles are historically and socially shaped, not simply dictated by biology.","Ethical life requires recognizing the freedom of oneself and others."],
+    works:["The Second Sex","The Ethics of Ambiguity","The Coming of Age","Memoirs of a Dutiful Daughter"],
+    contribution:"Her philosophical analysis of gender and oppression became foundational to modern feminist philosophy and continues to influence debates about freedom, identity and equality."
+  },
+  "Friedrich Nietzsche": {
+    bio:"Friedrich Nietzsche was a German philosopher and classical philologist. He challenged inherited moral and religious values and examined how culture, language, history and human drives shape our understanding of truth and morality.",
+    ideas:["A genealogy of morals investigates how values arise historically.","The ideal of self-overcoming calls for creative engagement with one's life.","Perspectivism questions the idea of a view from nowhere."],
+    works:["Thus Spoke Zarathustra","Beyond Good and Evil","On the Genealogy of Morality","The Gay Science"],
+    contribution:"Nietzsche profoundly influenced existentialism, critical theory, psychology, literary criticism and contemporary debates about morality and culture."
+  },
+  "Immanuel Kant": {
+    bio:"Immanuel Kant was an Enlightenment philosopher from Königsberg. He investigated the conditions and limits of human knowledge and developed a major account of morality based on rational principles and respect for persons.",
+    ideas:["Experience and the mind's organizing structures both contribute to knowledge.","The categorical imperative tests whether principles can be willed as universal laws.","Persons must be treated as ends in themselves, never merely as means."],
+    works:["Critique of Pure Reason","Groundwork of the Metaphysics of Morals","Critique of Practical Reason","Critique of Judgment"],
+    contribution:"Kant transformed modern epistemology, metaphysics and moral philosophy, setting the agenda for much subsequent European philosophy."
+  },
+  "Confucius": {
+    bio:"Confucius was a Chinese teacher and thinker whose teachings became central to the Confucian tradition. His thought emphasizes moral cultivation, humane relationships, learning, ritual practice and responsible government.",
+    ideas:["Ren refers to humaneness or benevolence.","Li concerns appropriate ritual, conduct and social forms.","Good government depends on moral example as well as institutions."],
+    works:["The Analects (a collection of sayings and conversations associated with Confucius and his followers)."],
+    contribution:"Confucian thought shaped education, ethics, political ideals and social practices across China and many other East Asian societies."
+  },
+  "Laozi": {
+    bio:"Laozi is the traditional sage associated with the Dao De Jing. The historical identity and date of Laozi remain debated. The text reflects on the Dao, naturalness, humility and the limits of forceful action.",
+    ideas:["The Dao is the way or source underlying the processes of the world.","Wu wei suggests non-forcing or action in accord with circumstances.","Simplicity, humility and restraint can be sources of wisdom."],
+    works:["Dao De Jing (Tao Te Ching), traditionally attributed to Laozi."],
+    contribution:"The Dao De Jing became a foundational text of Daoist philosophy and a major influence on Chinese thought, spirituality, art and political reflection."
+  },
+  "Mencius": {
+    bio:"Mencius was a Confucian philosopher of the Warring States period. He developed an influential account of human moral nature and argued that people possess beginnings of goodness that can be cultivated.",
+    ideas:["Human beings have incipient moral tendencies, often illustrated by compassion.","Moral development requires cultivation and supportive social conditions.","Rulers must govern benevolently and attend to the people's welfare."],
+    works:["Mencius, a collection of dialogues and teachings bearing his name."],
+    contribution:"Mencius became one of the most influential interpreters of Confucian ethics and shaped later discussions of human nature and moral education."
+  },
+  "Ibn Sina": {
+    bio:"Ibn Sina, known in Latin as Avicenna, was a Persian polymath whose work ranged across philosophy, medicine, logic and the natural sciences. His metaphysics explored existence, causation and the distinction between essence and existence.",
+    ideas:["The distinction between essence and existence is central to his metaphysics.","The Necessary Existent explains the existence of contingent things.","His thought includes influential arguments about the soul and self-awareness."],
+    works:["The Book of Healing (Kitab al-Shifa)","The Canon of Medicine (Al-Qanun fi al-Tibb)","The Book of Salvation (Al-Najat)"],
+    contribution:"Ibn Sina became one of the most influential philosophers in the Islamic world and had a major impact on medieval philosophy in Europe and the Middle East."
+  },
+  "Ibn Khaldun": {
+    bio:"Ibn Khaldun was a North African historian, political thinker and scholar. His analysis of social organization, political authority, economic life and historical change sought to explain the patterns behind the rise and decline of states.",
+    ideas:["Asabiyyah describes group feeling or social solidarity.","Political dynasties rise and decline through recognizable social processes.","Historical claims should be tested against what is possible in human society."],
+    works:["The Muqaddimah (Introduction to History)","Kitab al-Ibar (Universal History)"],
+    contribution:"Ibn Khaldun developed a distinctive philosophy of history and society, anticipating themes later studied in sociology, political economy and historiography."
+  },
+  "Kwasi Wiredu": {
+    bio:"Kwasi Wiredu was a Ghanaian philosopher whose work addressed African philosophy, epistemology, ethics, democracy and language. He urged philosophers to examine how inherited conceptual frameworks shape thought.",
+    ideas:["Conceptual decolonization critically examines concepts inherited through colonial education.","African languages can reveal alternative ways of framing philosophical problems.","Consensus can offer a model for democratic deliberation."],
+    works:["Philosophy and an African Culture","Cultural Universals and Particulars: An African Perspective","A Companion to African Philosophy (contributor and editor)"],
+    contribution:"Wiredu became a leading figure in contemporary African philosophy, especially debates about conceptual decolonization, language and democratic theory."
+  },
+  "Kwame Gyekye": {
+    bio:"Kwame Gyekye was a Ghanaian philosopher known for his interpretation of Akan thought and his account of moderate communitarianism. He examined how community shapes human life while defending the significance of individual agency.",
+    ideas:["Personhood is socially embedded but individuals retain moral agency.","Community and individual rights should be understood in a balanced relationship.","Akan concepts can contribute to contemporary philosophical debates."],
+    works:["An Essay on African Philosophical Thought","Tradition and Modernity: Philosophical Reflections on the African Experience","African Cultural Values: An Introduction"],
+    contribution:"Gyekye's moderate communitarianism became an important contribution to debates about personhood, rights, autonomy and the moral role of community in African philosophy."
+  },
+  "Sophie Oluwole": {
+    bio:"Sophie Bosede Oluwole was a Nigerian philosopher who worked on Yoruba philosophy, oral traditions and the relationship between African thought and the Western philosophical canon. She argued for rigorous philosophical engagement with indigenous intellectual resources.",
+    ideas:["Oral traditions can contain arguments worthy of philosophical analysis.","Yoruba thought should be studied on its own intellectual terms.","Comparative philosophy can challenge assumptions about who counts as a philosopher."],
+    works:["Witchcraft, Reincarnation and the God-Head","Socrates and Orunmila: Two Patron Saints of Classical Philosophy"],
+    contribution:"Oluwole expanded the study of Yoruba philosophy and challenged narrow accounts of the history and geography of philosophy."
+  },
+  "Paulin Hountondji": {
+    bio:"Paulin J. Hountondji was a Beninese philosopher who critically examined the definition and practice of African philosophy. He opposed treating African philosophy as a single, collective worldview and emphasized individual argument and critical debate.",
+    ideas:["Ethnophilosophy risks presenting a culture as if it had one shared philosophy.","Philosophy is a critical, argumentative activity carried out by thinkers.","African scholarship should participate in open international intellectual exchange."],
+    works:["African Philosophy: Myth and Reality","The Struggle for Meaning: Reflections on Philosophy, Culture, and Democracy in Africa"],
+    contribution:"Hountondji reshaped debates about method, authorship and critical practice in African philosophy and encouraged the development of African scholarly research."
+  },
+  "Henry Odera Oruka": {
+    bio:"Henry Odera Oruka was a Kenyan philosopher best known for sage philosophy. He documented conversations with African sages to show that critical, reflective philosophical reasoning exists beyond formal academic institutions.",
+    ideas:["Sage philosophy distinguishes reflective individual thought from mere repetition of communal beliefs.","Philosophical reflection can be found in oral as well as written settings.","The history of philosophy should attend to African thinkers and their arguments."],
+    works:["Sage Philosophy: Indigenous Thinkers and Modern Debate on African Philosophy","Essays and writings on African philosophy"],
+    contribution:"Oruka's project broadened the scope of African philosophy and generated important debates about oral reasoning, literacy and the nature of philosophical knowledge."
+  },
+  "Frantz Fanon": {
+    bio:"Frantz Fanon was a Martinican psychiatrist, political thinker and anti-colonial writer. His work analyzed the psychological and social effects of colonialism, racism and the struggle for liberation.",
+    ideas:["Colonialism shapes social institutions and psychological experience.","Liberation requires confronting structures that dehumanize the colonized.","National consciousness must develop beyond narrow elite interests."],
+    works:["Black Skin, White Masks","The Wretched of the Earth","A Dying Colonialism"],
+    contribution:"Fanon became a major influence on anti-colonial thought, postcolonial studies, critical race theory and liberation movements."
+  },
+  "Wangari Maathai": {
+    bio:"Wangari Maathai was a Kenyan environmental and political activist, scholar and founder of the Green Belt Movement. Her work connected ecological restoration with community participation, democratic responsibility and human dignity.",
+    ideas:["Environmental protection is connected to livelihoods and social justice.","Community action can restore ecosystems and strengthen civic agency.","Peace and democracy depend partly on responsible stewardship of shared resources."],
+    works:["The Green Belt Movement: Sharing the Approach and the Experience","Unbowed: A Memoir","Replenishing the Earth: Spiritual Values for Healing Ourselves and the World"],
+    contribution:"Maathai linked environmental action with human rights and democratic participation, inspiring environmental movements in Africa and internationally."
+  }
+};
+
 function showThinker(name) {
   const p=philosophers.find(x=>x.name===name);
-  if(!p)return;
-  alert(p.name+"\n"+p.origin+" | "+p.period+"\n\n"+p.idea+"\n\n"+p.bio);
+  const d=profileDetails[name];
+  if(!p||!d)return;
+  document.getElementById("profileTradition").textContent=p.origin+" · "+p.category+" philosophy";
+  document.getElementById("profileName").textContent=p.name;
+  document.getElementById("profileMeta").textContent=p.period+" | Central theme: "+p.idea;
+  document.getElementById("profileBio").textContent=d.bio;
+  document.getElementById("profileIdeas").innerHTML=d.ideas.map(x=>"<li>"+x+"</li>").join("");
+  document.getElementById("profileWorks").innerHTML=d.works.map(x=>"<li>"+x+"</li>").join("");
+  document.getElementById("profileContribution").textContent=d.contribution;
+  document.getElementById("profileModal").classList.add("open");
+  document.body.style.overflow="hidden";
 }
+function closeProfile() {
+  document.getElementById("profileModal").classList.remove("open");
+  document.body.style.overflow="";
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeProfile();});
 
 function toggleBookmark(name) {
   if(bookmarks.includes(name)) bookmarks=bookmarks.filter(x=>x!==name);
