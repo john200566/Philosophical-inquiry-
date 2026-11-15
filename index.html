@@ -256,7 +256,16 @@ footer {
 .profile-panel ul {padding-left:22px}
 .profile-close {border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:8px;padding:9px 12px}
 .profile-meta {font-size:13px;color:var(--muted)}
+.voice-controls {display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.voice-btn {border:1px solid var(--gold);background:var(--surface);color:var(--text);border-radius:8px;padding:9px 12px}
+.history-period {margin:18px 0;padding:22px;background:var(--surface);border:1px solid var(--border);border-radius:13px}
+.history-period p,.history-period li {line-height:1.75;color:var(--muted)}
+.history-period h3 {color:var(--gold)}
+.history-period h4 {margin-bottom:5px}
 
+.history-card {margin:18px 0}
+.history-card h2 {margin-top:8px}
+.question button {margin:5px 5px 5px 0}
 @media(max-width:600px) {
   header {padding:13px 4%}
   main {padding:18px 4% 90px}
@@ -283,7 +292,9 @@ footer {
   <button class="active" onclick="showPage('home',this)">Home</button>
   <button onclick="showPage('thinkers',this)">Thinkers</button>
   <button onclick="showPage('africa',this)">African Philosophy</button>
+  <button onclick="showPage('history',this)">History of Philosophy</button>
   <button onclick="showPage('catechism',this)">Catechism</button>
+  <button onclick="showPage('history',this)">History of Philosophy</button>
   <button onclick="showPage('academy',this)">Academy</button>
   <button onclick="showPage('bookmarks',this)">Bookmarks</button>
   <button onclick="showPage('premium',this)">Premium</button>
@@ -364,17 +375,93 @@ footer {
   </div>
 </section>
 
+<section id="history" class="page">
+  <div class="hero">
+    <div class="eyebrow">A voyage through human thought</div>
+    <h1>The history of philosophy</h1>
+    <p>Follow humanity's continuing attempt to understand reality, knowledge, goodness, beauty, society and our place in the universe. Each age inherits questions, challenges answers and opens new paths of inquiry.</p>
+    <div class="voice-controls"><button class="voice-btn" onclick="speakElement('historyJourney')">▶ Listen to introduction</button><button class="voice-btn" onclick="stopSpeaking()">■ Stop voice</button></div>
+  </div>
+  <div id="historyJourney">
+    <div class="notice"><strong>How to understand this journey</strong><p>Historical periods are useful guides, not sealed boxes. Traditions overlap, influence one another and develop at different speeds. The familiar sequence—ancient, medieval, modern and contemporary—is especially common in histories of European philosophy; it is not the whole history of philosophy. Philosophical reflection also has deep roots in Africa, South Asia, East Asia and other societies.</p></div>
+    <article class="history-period">
+      <span class="tag">Before and alongside the classical age</span><h2>1. Early philosophical traditions</h2>
+      <p>Long before philosophy became a named academic discipline, human communities asked systematic questions about the origin of the world, justice, death, knowledge, duty and the good life. Ancient Egyptian and Mesopotamian wisdom traditions, debates in ancient India, Chinese schools of thought and African intellectual traditions all belong in a global account of humanity's search for understanding. Their genres and methods were diverse: dialogue, argument, oral teaching, religious reflection, political counsel and observation of nature.</p>
+      <h3>Important traditions and thinkers</h3><ul><li><strong>Ancient Egypt:</strong> teachings associated with Ma'at explored truth, justice, balance and right order.</li><li><strong>Ancient India:</strong> the Upanishadic thinkers, the Buddha and Mahavira explored selfhood, suffering, liberation and the nature of reality.</li><li><strong>Ancient China:</strong> Confucius, Laozi and later Mozi and Mencius examined ethical conduct, social order, nature and good government.</li><li><strong>African traditions:</strong> diverse oral, textual and communal traditions explored personhood, moral responsibility, spiritual reality, authority and community. These traditions should be studied in their own historical contexts rather than treated as one uniform worldview.</li></ul>
+    </article>
+    <article class="history-period">
+      <span class="tag">c. 600 BCE – c. 500 CE</span><h2>2. Ancient Greek and Roman philosophy</h2>
+      <p>In the Greek-speaking world, some thinkers increasingly sought rational explanations of nature rather than relying only on inherited myth. Thales is often presented as an early natural philosopher; Anaximander, Anaximenes, Heraclitus, Parmenides, Empedocles and Democritus developed competing accounts of change, being and the elements. This was not the beginning of all human philosophy, but it was a formative beginning for the tradition later called Western philosophy.</p>
+      <p>Socrates redirected attention toward virtue, justice and how one ought to live. Plato developed dialogues on knowledge, reality and political justice, and founded the Academy. Aristotle systematized inquiry into logic, metaphysics, biology, ethics, politics and art. Later Hellenistic schools—including Stoicism, Epicureanism and Skepticism—asked how people could live well amid uncertainty and change. Roman thinkers such as Cicero, Seneca, Epictetus and Marcus Aurelius developed these debates.</p>
+      <h3>Key questions</h3><ul><li>What is the basic nature of reality?</li><li>Can reason distinguish knowledge from opinion?</li><li>What is virtue, and what makes a life flourish?</li><li>What makes a political community just?</li></ul>
+      <h3>Major philosophers</h3><p>Thales, Heraclitus, Parmenides, Democritus, Socrates, Plato, Aristotle, Diogenes, Epicurus, Zeno of Citium, Cicero, Seneca, Epictetus and Marcus Aurelius.</p>
+    </article>
+    <article class="history-period">
+      <span class="tag">c. 500 – c. 1500, with different regional timelines</span><h2>3. Medieval philosophy</h2>
+      <p>Medieval philosophy was not simply a period of silence or intellectual decline. It was a rich era of debate across Christian, Islamic and Jewish traditions, as well as continuing philosophical work in India, China and Africa. Thinkers examined how reason relates to revelation, whether the universe had a beginning, what makes an action good, how language refers to reality and how human beings can know.</p>
+      <p>In Christian philosophy, Augustine explored time, evil, memory and the will; Anselm developed arguments concerning God; and Thomas Aquinas brought Aristotelian philosophy into sustained conversation with Christian theology. In the Islamic world, Al-Kindi, Al-Farabi, Ibn Sina (Avicenna), Al-Ghazali and Ibn Rushd (Averroes) debated reason, prophecy, metaphysics and the interpretation of Aristotle. Jewish philosophers such as Saadia Gaon and Maimonides also made major contributions. In Africa, North African intellectual centres were connected to wider Mediterranean and Islamic scholarly networks.</p>
+      <h3>Major philosophers</h3><p>Augustine, Boethius, Anselm, Peter Abelard, Thomas Aquinas, Duns Scotus, William of Ockham, Al-Kindi, Al-Farabi, Ibn Sina, Al-Ghazali, Ibn Rushd, Maimonides and others.</p>
+    </article>
+    <article class="history-period">
+      <span class="tag">c. 1400 – 1800</span><h2>4. Renaissance and early modern philosophy</h2>
+      <p>European Renaissance humanism renewed interest in classical texts and human capacities. The rise of modern science, religious conflict, expanding trade and political change transformed philosophical questions. Rationalists emphasized reason as a source of knowledge; empiricists emphasized experience. Political philosophers debated sovereignty, rights, consent and the limits of government.</p>
+      <p>René Descartes sought a secure foundation for knowledge through methodical doubt. Spinoza developed a comprehensive metaphysical system; Leibniz defended a rational account of reality. Locke, Berkeley and Hume examined experience, perception and the limits of knowledge. Hobbes, Locke and Rousseau developed influential social-contract theories. Immanuel Kant later sought to explain the conditions and limits of human knowledge and defended a morality grounded in rational duty.</p>
+      <h3>Major philosophers</h3><p>Niccolò Machiavelli, Francis Bacon, René Descartes, Thomas Hobbes, Baruch Spinoza, John Locke, Gottfried Leibniz, George Berkeley, David Hume, Jean-Jacques Rousseau and Immanuel Kant.</p>
+    </article>
+    <article class="history-period">
+      <span class="tag">c. 1800 – early 20th century</span><h2>5. Nineteenth-century and late modern philosophy</h2>
+      <p>Industrialization, revolution, capitalism, nationalism, colonialism and new sciences changed the problems philosophers addressed. German idealists explored history, freedom and the structure of experience. Utilitarians assessed actions by their consequences for well-being. Marx analyzed class, labour and material social relations. Kierkegaard and Nietzsche challenged inherited systems and explored individuality, faith, values and meaning. Pragmatists asked how ideas work in lived experience.</p>
+      <h3>Major philosophers</h3><p>G. W. F. Hegel, Arthur Schopenhauer, Søren Kierkegaard, Karl Marx, John Stuart Mill, Friedrich Nietzsche, Charles S. Peirce, William James, Henri Bergson and Mary Wollstonecraft (whose earlier work profoundly shaped later debates on equality).</p>
+    </article>
+    <article class="history-period">
+      <span class="tag">20th century to the present</span><h2>6. Contemporary philosophy</h2>
+      <p>Contemporary philosophy is diverse rather than a single school. Analytic philosophers developed rigorous approaches to language, logic, science and mind. Phenomenologists and existentialists investigated lived experience, freedom and meaning. Critical theory examined power, ideology and social domination. Feminist philosophy challenged exclusions in inherited canons and analyzed gender and oppression. Postcolonial and decolonial thinkers examined empire, race, knowledge and the afterlives of colonialism. Applied ethics now addresses medicine, technology, climate, animals and global justice.</p>
+      <p>In African philosophy, contemporary debates include ethnophilosophy and its critics, professional philosophy, sage philosophy, hermeneutics, nationalism, personhood, communalism, democracy, language and decolonization. Philosophers such as Kwasi Wiredu, Kwame Gyekye, Sophie Oluwole, Paulin Hountondji, Henry Odera Oruka and others have shaped these conversations. Contemporary philosophy is global: thinkers in Africa, Asia, Europe, the Americas and elsewhere respond to shared problems from distinct intellectual histories.</p>
+      <h3>Major philosophers and movements</h3><p>Bertrand Russell, Ludwig Wittgenstein, G. E. Moore, W. V. O. Quine, Hannah Arendt, Simone de Beauvoir, Jean-Paul Sartre, Frantz Fanon, Michel Foucault, Jürgen Habermas, John Rawls, Judith Butler, Kwasi Wiredu, Kwame Gyekye, Sophie Oluwole, Paulin Hountondji, Henry Odera Oruka, Peter Singer and many others.</p>
+    </article>
+    <article class="history-period">
+      <span class="tag">A continuing adventure</span><h2>7. Philosophy as a voyage of discovery</h2>
+      <p>Alfred North Whitehead's <em>Adventures of Ideas</em> (1933) offers a useful lens for studying intellectual history. Whitehead asks us to notice how ideas travel through societies, meet new circumstances, are criticized and reinterpreted, and help shape institutions and civilization. The history of philosophy can therefore be read not merely as a list of famous names, but as an unfolding conversation: ideas are proposed, tested, challenged, transformed and carried into new generations.</p>
+      <p>This approach does not mean that history moves in a simple straight line or that every new idea is an improvement. It invites us to trace both the power and the limits of ideas, and to ask what consequences they have for human life.</p>
+      <p><strong>Study question:</strong> Which philosophical idea has most changed the way human beings understand themselves, and what evidence supports your answer?</p>
+    </article>
+  </div>
+  <div class="notice"><strong>Reading note:</strong> The dates and period labels are approximate teaching guides. The history of philosophy is wider than the conventional Western timeline, and many traditions overlap.</div>
+</section>
+
 <section id="catechism" class="page">
   <h1>Philosophical Catechism</h1>
-  <p class="muted">Questions that invite reflection, answers that encourage understanding.</p>
+  <p class="muted">Questions that invite reflection, answers that encourage understanding. Use the listen buttons to hear the material aloud.</p>
   <div class="filters">
     <button class="active" onclick="renderQuestions('all',this)">All</button>
     <button onclick="renderQuestions('Ethics',this)">Ethics</button>
     <button onclick="renderQuestions('Knowledge',this)">Knowledge</button>
     <button onclick="renderQuestions('African philosophy',this)">African philosophy</button>
     <button onclick="renderQuestions('Existence',this)">Existence</button>
+    <button onclick="renderQuestions('History',this)">History</button>
+    <button onclick="renderQuestions('Metaphysics',this)">Metaphysics</button>
+    <button onclick="renderQuestions('Political philosophy',this)">Political philosophy</button>
+    <button onclick="renderQuestions('Philosophy of religion',this)">Religion</button>
+    <button onclick="renderQuestions('Logic',this)">Logic</button>
+    <button onclick="renderQuestions('Aesthetics',this)">Aesthetics</button>
+  <button onclick="renderQuestions('Metaphysics',this)">Metaphysics</button>
+  <button onclick="renderQuestions('Political philosophy',this)">Politics</button>
+  <button onclick="renderQuestions('Logic',this)">Logic</button>
+  <button onclick="renderQuestions('Aesthetics',this)">Aesthetics</button>
+  <button onclick="renderQuestions('Philosophy of religion',this)">Religion</button>
+  <button onclick="renderQuestions('History',this)">History</button>
   </div>
   <div id="questionList"></div>
+</section>
+
+<section id="history" class="page">
+  <div class="hero">
+    <div class="eyebrow">A voyage through human thought</div>
+    <h1>The History of Philosophy</h1>
+    <p>Follow humanity's long inquiry into reality, knowledge, justice, beauty, meaning and the good life. This is a connected world history, not a story belonging to one civilization alone.</p>
+  </div>
+  <div class="notice"><strong>How to use this journey</strong><br>Study each period in order, listen to the lesson, meet its thinkers, and ask how its questions still matter today. Dates are approximate and traditions often overlap.</div>
+  <div id="historyList"></div>
 </section>
 
 <section id="academy" class="page">
@@ -495,7 +582,63 @@ const questions = [
  {topic:"African philosophy",q:"What is personhood in African philosophy?",a:"Some African philosophical approaches emphasize that personhood is shaped partly through relationships, moral conduct and participation in community. Other thinkers stress individual autonomy."},
  {topic:"Existence",q:"What is the meaning of life?",a:"There is no universally accepted answer. Philosophers have connected meaning with happiness, virtue, relationships, freedom, service, faith and the creation of purpose."},
  {topic:"Existence",q:"What is freedom?",a:"Freedom can mean the absence of external constraint, the ability to make meaningful choices, or the capacity to govern oneself through reason."},
- {topic:"Existence",q:"What is philosophy?",a:"Philosophy is the disciplined examination of fundamental questions about reality, knowledge, value, reason, existence and human life."}
+ {topic:"Existence",q:"What is philosophy?",a:"Philosophy is the disciplined examination of fundamental questions about reality, knowledge, value, reason, existence and human life."},
+ {topic:"Metaphysics",q:"What is metaphysics?",a:"Metaphysics investigates the most general features of reality: what exists, what it means to be, whether things endure through change, and how mind, matter, time and causation are related."},
+ {topic:"Metaphysics",q:"What is the problem of being?",a:"The problem of being asks what it means for anything to exist. Parmenides, Plato, Aristotle and later philosophers offered different accounts of being, change and substance."},
+ {topic:"Metaphysics",q:"What is the difference between appearance and reality?",a:"Appearance is how something seems to us; reality concerns how it is independently of our impressions. Philosophers ask whether reason, experience or both can take us beyond appearances."},
+ {topic:"Metaphysics",q:"What is causation?",a:"Causation concerns the relation by which one event or condition brings about another. Hume questioned whether we perceive necessary connection, while other philosophers defend accounts of causal powers or laws."},
+ {topic:"Political philosophy",q:"What is political philosophy?",a:"Political philosophy examines power, authority, rights, justice, freedom, equality, citizenship and the proper organization of society."},
+ {topic:"Political philosophy",q:"What makes a government legitimate?",a:"A government may be judged by consent, justice, protection of rights, public participation, lawful authority and its ability to serve the common good. Philosophers disagree about which conditions are essential."},
+ {topic:"Political philosophy",q:"What is justice?",a:"Justice concerns what people are owed and how benefits, burdens, rights and opportunities should be distributed. Plato, Aristotle, Rawls and many African thinkers approach it differently."},
+ {topic:"Political philosophy",q:"What is liberty?",a:"Liberty can mean freedom from interference, freedom to develop one's capacities, or collective self-determination. Political philosophers debate how liberty should be balanced with equality and security."},
+ {topic:"Logic",q:"What is logic?",a:"Logic studies the principles of good reasoning. It helps us distinguish valid arguments from invalid ones and identify whether conclusions follow from premises."},
+ {topic:"Logic",q:"What is an argument in philosophy?",a:"An argument is a set of statements in which premises are offered as reasons for accepting a conclusion. It is not simply a quarrel or disagreement."},
+ {topic:"Logic",q:"What is the difference between validity and soundness?",a:"An argument is valid when its conclusion follows logically if its premises are true. It is sound when it is valid and its premises are in fact true."},
+ {topic:"Aesthetics",q:"What is aesthetics?",a:"Aesthetics is the branch of philosophy concerned with beauty, art, taste, interpretation and aesthetic experience. It asks what makes something art and whether judgments of beauty can be justified."},
+ {topic:"Aesthetics",q:"Is beauty objective or subjective?",a:"Some theories locate beauty in features of the object; others emphasize the response of observers, culture or history. Many contemporary accounts recognize an interaction between these dimensions."},
+ {topic:"Philosophy of religion",q:"What is philosophy of religion?",a:"Philosophy of religion uses reasoned argument to examine religious concepts and claims, including God, faith, evil, miracles, religious experience and life after death."},
+ {topic:"Philosophy of religion",q:"What is the problem of evil?",a:"The problem asks how the existence of suffering and evil can be reconciled with an all-powerful, all-knowing and perfectly good God. Philosophers have proposed several responses, none accepted by everyone."},
+ {topic:"History",q:"Did philosophy begin only in ancient Greece?",a:"No. Ancient Greek philosophy became enormously influential, but systematic reflection on reality, knowledge, ethics and social order also developed in ancient Egypt, Mesopotamia, India, China and other African and Asian traditions. The evidence and forms of these traditions differ, and historians debate how best to describe them."},
+ {topic:"History",q:"What is the Socratic method?",a:"The Socratic method is a form of inquiry through questions and answers. It tests definitions, exposes assumptions and invites a person to examine whether their beliefs are consistent."},
+ {topic:"History",q:"What distinguishes medieval philosophy?",a:"Medieval philosophy developed across Christian, Islamic and Jewish intellectual worlds, often bringing Greek philosophy into dialogue with theology, law, medicine and science. It addressed reason and revelation, being, intellect and ethics."},
+ {topic:"History",q:"What changed in modern philosophy?",a:"Modern philosophers gave sustained attention to the foundations and limits of knowledge, the role of reason and experience, scientific method, individual rights and political authority. Descartes, Locke, Hume and Kant are central figures."},
+ {topic:"History",q:"What is contemporary philosophy?",a:"Contemporary philosophy refers broadly to philosophical work from the late nineteenth century to the present. It includes analytic and continental traditions, pragmatism, phenomenology, existentialism, critical theory, feminist philosophy, African philosophy and many others."},
+ {topic:"African philosophy",q:"What is ethnophilosophy?",a:"Ethnophilosophy usually refers to the study or presentation of shared worldviews, concepts and beliefs found in a culture. African philosophers have debated whether describing a collective worldview is the same as doing critical philosophy."},
+ {topic:"African philosophy",q:"What is sage philosophy?",a:"Sage philosophy, associated especially with Henry Odera Oruka, investigates the reflective and critical ideas of individual thinkers within oral societies. It distinguishes thoughtful philosophical argument from mere repetition of customary belief."},
+ {topic:"African philosophy",q:"What is conceptual decolonization?",a:"Conceptual decolonization, associated with Kwasi Wiredu, involves examining inherited concepts and language critically, including concepts shaped by colonial education, and clarifying ideas through African languages and experience."},
+ {topic:"Ethics",q:"What is consequentialism?",a:"Consequentialism judges actions primarily by their outcomes. Utilitarianism is a well-known form that evaluates actions by their effects on overall well-being."},
+ {topic:"Ethics",q:"What is deontology?",a:"Deontological ethics emphasizes duties, rules and principles. Immanuel Kant's moral philosophy is a major example, stressing that persons should be treated as ends and never merely as means."},
+ {topic:"Ethics",q:"What is existentialist ethics?",a:"Existentialist approaches examine freedom, responsibility, authenticity and the challenge of creating meaning. They stress that people cannot avoid responsibility by simply surrendering their choices to convention."},
+ {topic:"History",q:"Where did philosophy begin?",a:"There is no single birthplace for philosophy. Distinct traditions of systematic reflection developed in many societies, including ancient Africa, India, China and Greece. The familiar Western philosophical canon traces one influential lineage through ancient Greece."},
+ {topic:"History",q:"Who were the pre-Socratic philosophers?",a:"They were early Greek thinkers before or around the time of Socrates who investigated nature, change, being and the basic principles of the cosmos. Important names include Thales, Anaximander, Heraclitus, Parmenides and Democritus."},
+ {topic:"History",q:"Why is Socrates important in the history of philosophy?",a:"Socrates made moral examination and disciplined dialogue central to philosophy. By asking people to explain and defend their beliefs, he helped establish a model of inquiry that tests assumptions through questions and reasons."},
+ {topic:"History",q:"What is the difference between ancient and medieval philosophy?",a:"Ancient philosophy includes Greek, Roman and other classical traditions concerned with nature, knowledge, ethics and political life. Medieval philosophy includes major debates in Christian, Islamic and Jewish traditions, among others, often exploring the relationship between reason, revelation and metaphysics. The periods overlap in different regions."},
+ {topic:"History",q:"What changed in modern philosophy?",a:"Modern philosophers responded to new science, religious conflict and political change. They debated the sources and limits of knowledge, the role of reason and experience, individual rights, political authority and the foundations of morality."},
+ {topic:"History",q:"What makes philosophy contemporary?",a:"Contemporary philosophy refers broadly to philosophical work from the late nineteenth and twentieth centuries to today. It includes analytic philosophy, phenomenology, existentialism, pragmatism, feminist philosophy, critical theory, postcolonial thought and many other approaches."},
+ {topic:"History",q:"Is the history of philosophy only the history of Western thinkers?",a:"No. African, Asian, Indigenous, Islamic and other traditions have their own histories, texts, debates and methods. A global history studies these traditions in their own contexts and also examines their encounters and influences."},
+ {topic:"History",q:"What is the value of studying the history of philosophy?",a:"It shows how questions and arguments develop over time, helps us recognize assumptions inherited from the past, and gives us a wider range of ideas with which to think about present problems."},
+ {topic:"Metaphysics",q:"What is metaphysics?",a:"Metaphysics investigates the most general features of reality: what exists, what it means to be, how things persist and change, and how causes, time, identity and possibility should be understood."},
+ {topic:"Metaphysics",q:"What is the difference between appearance and reality?",a:"Appearance is how something seems or is presented to us; reality concerns what it is independently of, or beyond, that presentation. Philosophers debate how far perception reveals reality and how it can mislead us."},
+ {topic:"Metaphysics",q:"What is free will?",a:"Free will concerns whether people can genuinely choose among alternatives and be responsible for their actions. Compatibilists argue freedom can coexist with causal determination; incompatibilists deny that both can be true in the relevant sense."},
+ {topic:"Metaphysics",q:"What is the mind–body problem?",a:"It is the problem of explaining the relationship between mental life—thoughts, feelings and consciousness—and the physical body and brain. Philosophers disagree about whether mind and body are distinct or aspects of one reality."},
+ {topic:"Political philosophy",q:"What is political philosophy?",a:"Political philosophy examines authority, justice, rights, liberty, equality, law, citizenship and the proper organization of collective life."},
+ {topic:"Political philosophy",q:"What is justice?",a:"Justice concerns what people are owed and how benefits, burdens, rights and opportunities should be distributed. Competing theories emphasize equality, need, desert, liberty, capability or fair procedures."},
+ {topic:"Political philosophy",q:"What is democracy?",a:"Democracy is a form of collective self-government in which people have a meaningful role in making public decisions. Philosophers debate whether it requires elections alone or also participation, rights, deliberation and social equality."},
+ {topic:"Political philosophy",q:"What is colonialism in political philosophy?",a:"Colonialism involves the domination of one people or territory by an external power. Philosophical analysis examines its justifications, violence, economic structures, effects on identity and knowledge, and the demands of liberation and repair."},
+ {topic:"Philosophy of religion",q:"What is philosophy of religion?",a:"Philosophy of religion critically examines concepts and arguments concerning God or ultimate reality, faith, religious experience, evil, miracles, religious language and the relation between reason and belief."},
+ {topic:"Philosophy of religion",q:"What is the problem of evil?",a:"It asks how the existence of suffering and wrongdoing can be reconciled with belief in a God who is all-powerful, all-knowing and perfectly good. Philosophers offer different responses, and the debate remains open."},
+ {topic:"Philosophy of religion",q:"Can faith and reason work together?",a:"Some thinkers see them as complementary sources of understanding; others argue that certain claims of faith exceed or conflict with what reason can establish. The answer depends partly on how faith and reason are defined."},
+ {topic:"African philosophy",q:"What is sage philosophy?",a:"Sage philosophy, associated especially with Henry Odera Oruka, studies reflective individuals who critically examine beliefs and offer reasoned views, including in oral settings. It distinguishes critical reflection from simply repeating communal opinion."},
+ {topic:"African philosophy",q:"What is conceptual decolonization?",a:"Kwasi Wiredu used this idea to encourage critical examination of concepts inherited through colonial languages and education, including whether African languages and intellectual resources can clarify philosophical problems."},
+ {topic:"African philosophy",q:"What is the debate about ethnophilosophy?",a:"The debate concerns whether shared cultural beliefs should be described as a community's philosophy, or whether philosophy must primarily involve explicit critical argument by identifiable thinkers. African philosophers have taken different positions in this discussion."},
+ {topic:"Knowledge",q:"What is epistemology?",a:"Epistemology is the branch of philosophy that studies knowledge: what it is, how it is acquired, what justifies belief, and whether there are limits to what human beings can know."},
+ {topic:"Knowledge",q:"What is the difference between rationalism and empiricism?",a:"Rationalism gives reason a central role in knowledge, sometimes claiming that some truths can be known independently of experience. Empiricism emphasizes experience and observation as fundamental sources of knowledge."},
+ {topic:"Knowledge",q:"What is skepticism?",a:"Skepticism questions whether our beliefs amount to knowledge or whether our evidence is strong enough. It can be a method for testing claims rather than simply denying that anything can be known."},
+ {topic:"Ethics",q:"What is consequentialism?",a:"Consequentialism judges actions by their outcomes. Utilitarianism is a well-known form that evaluates actions by their effects on overall well-being."},
+ {topic:"Ethics",q:"What is deontological ethics?",a:"Deontological ethics emphasizes duties, rules and principles that constrain what we may do, rather than judging actions only by their consequences. Kant is a major figure in this tradition."},
+ {topic:"Ethics",q:"What is virtue ethics?",a:"Virtue ethics focuses on the character and practical wisdom needed to live well. Rather than asking only which rule to follow, it asks what a good person would become and do."},
+ {topic:"Existence",q:"What is existentialism?",a:"Existentialism is a family of approaches concerned with human existence, freedom, responsibility, anxiety, choice and meaning. Major figures include Søren Kierkegaard, Friedrich Nietzsche, Jean-Paul Sartre and Simone de Beauvoir, though they differ greatly."},
+ {topic:"Existence",q:"What is the meaning of being?",a:"This is a central metaphysical question about what it means for anything to exist. Philosophers have approached it through substance, process, existence, essence, events and relations."}
 ];
 
 const quiz = [
@@ -535,7 +678,7 @@ function showPage(id,button) {
   if(button) button.classList.add("active");
   else {
     const navButtons=[...document.querySelectorAll("nav button")];
-    const target={home:0,thinkers:1,africa:2,catechism:3,academy:4,bookmarks:5,premium:6}[id];
+    const target={home:0,thinkers:1,africa:2,catechism:3,history:4,academy:5,bookmarks:6,premium:7}[id];
     navButtons[target].classList.add("active");
   }
   window.scrollTo({top:0,behavior:"smooth"});
@@ -733,6 +876,56 @@ function renderBookmarks() {
     :"<p>You have not saved any philosophers yet.</p>";
 }
 
+const historyPeriods = [
+ {period:"1. Ancient philosophy",dates:"c. 3000 BCE – c. 500 CE",body:"Ancient philosophy did not emerge in a single place or at one moment. In Egypt and Mesopotamia, scribes and sages reflected on justice, order, wisdom, death and the place of human beings in the cosmos. In India, the Vedic and Upanishadic traditions explored the self, ultimate reality, action and liberation; Buddhist and Jain thinkers developed rigorous accounts of suffering, knowledge and non-violence. In China, Confucian, Daoist and Mohist thinkers debated virtue, social harmony, nature and good government. In the Greek-speaking world, early thinkers investigated nature and change; Socrates turned attention toward ethical examination, Plato developed dialogues on justice and knowledge, and Aristotle systematized logic, biology, ethics, politics and metaphysics.",thinkers:"Egyptian wisdom traditions; Thales; Anaximander; Heraclitus; Parmenides; Pythagoras; Socrates; Plato; Aristotle; Epicurus; Zeno of Citium; Confucius; Laozi; Mozi; Mencius; the Buddha; Mahavira; Nāgārjuna.",works:"Plato’s Republic; Aristotle’s Metaphysics and Nicomachean Ethics; the Analects; the Dao De Jing; the Upanishads; early Buddhist discourses.",question:"Is reality fundamentally changing, permanent, or both?"},
+ {period:"2. Late antiquity and the medieval worlds",dates:"c. 500 – 1500",body:"Philosophy continued in multiple intellectual communities. In Europe, Augustine and Boethius shaped Christian thought; later scholastic philosophers such as Anselm and Thomas Aquinas explored the relation between faith and reason. In the Islamic world, al-Kindi, al-Farabi, Ibn Sina (Avicenna), al-Ghazali and Ibn Rushd (Averroes) debated metaphysics, logic, science and theology. Jewish philosophers such as Saadia Gaon and Maimonides also brought philosophical reasoning into dialogue with religious tradition. In Africa, intellectual life included the scholarship of North African and Ethiopian traditions; in the wider world, Indian and Chinese philosophical schools continued to develop.",thinkers:"Augustine; Boethius; Anselm; Thomas Aquinas; al-Kindi; al-Farabi; Ibn Sina; al-Ghazali; Ibn Rushd; Maimonides; Dōgen; Zhu Xi; Madhva; Rāmānuja.",works:"Augustine’s Confessions; Aquinas’s Summa Theologiae; Ibn Sina’s Book of Healing; al-Ghazali’s The Incoherence of the Philosophers; Maimonides’ Guide for the Perplexed.",question:"Can philosophical reason and religious faith support or challenge one another?"},
+ {period:"3. Renaissance and early modern philosophy",dates:"c. 1400 – 1700",body:"Renaissance humanism renewed interest in classical texts, education, political life and human creativity. The growth of print, oceanic encounters, religious reform and new scientific methods changed intellectual life. Early modern philosophers asked how knowledge could be secured and how political authority should be justified. René Descartes sought certainty through methodical doubt; Thomas Hobbes examined political order; John Locke defended empiricism and natural rights; Baruch Spinoza developed a rationalist metaphysics; and Gottfried Wilhelm Leibniz proposed a system of monads and sufficient reason. These debates unfolded alongside major philosophical traditions in Africa, Asia and the Americas, which should not be treated as absent from world history.",thinkers:"Erasmus; Niccolò Machiavelli; René Descartes; Thomas Hobbes; Anne Conway; Baruch Spinoza; John Locke; Gottfried Wilhelm Leibniz.",works:"Descartes’ Meditations on First Philosophy; Hobbes’ Leviathan; Spinoza’s Ethics; Locke’s Essay Concerning Human Understanding; Machiavelli’s The Prince.",question:"What can we know, and what makes political authority legitimate?"},
+ {period:"4. Enlightenment and nineteenth-century philosophy",dates:"c. 1700 – 1900",body:"Enlightenment thinkers debated reason, liberty, education, religion, progress and political reform. David Hume challenged assumptions about causation and the self; Jean-Jacques Rousseau examined freedom and inequality; Immanuel Kant investigated the conditions and limits of knowledge and grounded morality in rational duty. In the nineteenth century, G. W. F. Hegel developed a philosophy of history and social life; Karl Marx analyzed capitalism and class; Søren Kierkegaard explored individual existence and faith; John Stuart Mill defended liberty and utilitarian ethics; Friedrich Nietzsche criticized inherited values; and William James helped develop pragmatism. The period also includes influential women thinkers and anti-colonial voices whose contributions were often marginalized in standard histories.",thinkers:"David Hume; Jean-Jacques Rousseau; Immanuel Kant; Mary Wollstonecraft; G. W. F. Hegel; Arthur Schopenhauer; Søren Kierkegaard; Karl Marx; John Stuart Mill; Friedrich Nietzsche; William James.",works:"Kant’s Critique of Pure Reason; Wollstonecraft’s A Vindication of the Rights of Woman; Hegel’s Phenomenology of Spirit; Marx and Engels’ The Communist Manifesto; Mill’s On Liberty; Nietzsche’s Thus Spoke Zarathustra.",question:"Can reason, freedom and social progress transform human life?"},
+ {period:"5. Twentieth-century and contemporary philosophy",dates:"c. 1900 – present",body:"Philosophy in the twentieth and twenty-first centuries is plural and global. Analytic philosophy developed through logic, language and argument; phenomenology examined lived experience; existentialism explored freedom and meaning; pragmatism emphasized inquiry and practical consequences; critical theory studied power and society; feminist philosophy challenged exclusion and gender hierarchy; and postcolonial thinkers analyzed empire, race and liberation. African philosophy expanded through debates about colonialism, personhood, language, tradition, democracy and knowledge. Contemporary work also addresses technology, artificial intelligence, climate change, bioethics, global justice and the future of humanity. These movements overlap rather than forming one single school.",thinkers:"Bertrand Russell; G. E. Moore; Ludwig Wittgenstein; Edmund Husserl; Martin Heidegger; Simone de Beauvoir; Jean-Paul Sartre; Hannah Arendt; W. V. O. Quine; John Rawls; Michel Foucault; Frantz Fanon; Kwasi Wiredu; Kwame Gyekye; Sophie Oluwole; Henry Odera Oruka; Paulin Hountondji; Martha Nussbaum; Judith Butler; Achille Mbembe; Alfred North Whitehead.",works:"Whitehead’s Process and Reality and Adventures of Ideas; Wittgenstein’s Philosophical Investigations; Beauvoir’s The Second Sex; Fanon’s The Wretched of the Earth; Rawls’ A Theory of Justice; Wiredu’s Philosophy and an African Culture.",question:"How should philosophy respond to power, difference, science and a rapidly changing world?"}
+];
+
+function speakText(text) {
+  if(!('speechSynthesis' in window)) { alert('Voice playback is not supported by this browser. Try opening the app in Chrome.'); return; }
+  window.speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(String(text||''));
+  utterance.lang='en-GB';
+  utterance.rate=0.92;
+  window.speechSynthesis.speak(utterance);
+}
+function stopVoice() { if('speechSynthesis' in window) window.speechSynthesis.cancel(); }
+function renderHistory() {
+  document.getElementById('historyList').innerHTML=historyPeriods.map((item,i)=>`
+    <article class="card history-card">
+      <span class="tag">${item.dates}</span><h2>${item.period}</h2>
+      <p>${item.body}</p>
+      <p><strong>Important thinkers:</strong> ${item.thinkers}</p>
+      <p><strong>Selected works:</strong> ${item.works}</p>
+      <p><strong>Guiding question:</strong> ${item.question}</p>
+      <button class="secondary" onclick="speakText(${JSON.stringify(item.period+'. '+item.body+' Important thinkers: '+item.thinkers+'. Selected works: '+item.works+'. Guiding question: '+item.question).replace(/</g,'\\u003c')})">🔊 Listen to lesson</button>
+    </article>`).join('');
+}
+
+function speakText(text) {
+  if(!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+    alert("Voice reading is not supported by this browser. Try opening the app in Chrome.");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang="en-GB";
+  utterance.rate=0.92;
+  utterance.pitch=1;
+  window.speechSynthesis.speak(utterance);
+}
+function speakElement(id) {
+  const el=document.getElementById(id);
+  if(!el)return;
+  speakText(el.innerText || el.textContent || "");
+}
+function stopSpeaking() {
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
 function renderQuestions(topic,button) {
   document.querySelectorAll("#catechism .filters button").forEach(b=>b.classList.remove("active"));
   if(button)button.classList.add("active");
@@ -741,8 +934,9 @@ function renderQuestions(topic,button) {
     <div class="question">
       <span class="tag">${q.topic}</span>
       <h3>${q.q}</h3>
+      <button class="secondary" onclick="speakText(${JSON.stringify(q.q)})">🔊 Listen to question</button>
       <button class="secondary" onclick="revealAnswer(this,${questions.indexOf(q)})">Reveal answer</button>
-      <div class="answer" id="answer${questions.indexOf(q)}">${q.a}</div>
+      <div class="answer" id="answer${questions.indexOf(q)}">${q.a}<br><button class="secondary" onclick="speakText(${JSON.stringify(q.a)})">🔊 Listen to answer</button></div>
     </div>`).join("");
 }
 
@@ -829,6 +1023,7 @@ function init() {
   renderThinkers();
   renderAfrican();
   renderQuestions("all");
+  renderHistory();
   updateHome();
   updateProgress();
 }
